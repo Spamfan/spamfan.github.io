@@ -1,15 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Incomplete URL - spamfan.github.io</title>
+    <title>Welcome | Spamfan.github.io</title>
+    <style>
+        :root {
+            --main-black: #000000;
+            --gray-text: #666666;
+            --unstable-red: #c62828;
+            --walmart-blue: #0071ce; /* Standard Walmart Blue */
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: white;
+            color: var(--main-black);
+            margin: 0;
+            display: flex;
+            justify-content: flex-start;
+            padding: 20px;
+            line-height: 1.3;
+        }
+
+        .container {
+            max-width: 500px; 
+            width: 100%;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+            margin-top: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 30px;
+            margin-top: 0;
+        }
+
+        /* Updated for Walmart Blue branding */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            margin: 12px 0;
+            border: 2px solid var(--walmart-blue);
+            background: var(--walmart-blue);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            box-sizing: border-box;
+            text-align: left;
+            font-size: 1rem;
+        }
+
+        .toggle-trigger {
+            color: var(--gray-text);
+            background: none;
+            border: none;
+            font-size: 0.95rem;
+            cursor: pointer;
+            padding: 0;
+            margin-top: 40px;
+            display: block;
+            text-align: left;
+        }
+
+        #unstable-menu {
+            display: none;
+            margin-top: 20px;
+            padding-left: 30px;
+        }
+
+        .warning-text {
+            color: var(--gray-text);
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+        }
+
+        /* Updated to wrap to text length */
+        .btn-small {
+            display: inline-block; /* Changed from block to wrap text */
+            padding: 10px 16px;
+            margin: 10px 0;
+            font-size: 0.95rem;
+            border: 2px solid var(--unstable-red);
+            color: var(--unstable-red);
+            text-decoration: none;
+            border-radius: 8px;
+            text-align: left;
+            clear: both; /* Ensures they still stack vertically */
+        }
+
+        .unstable-link-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        @media (min-width: 600px) {
+            body {
+                padding: 60px;
+            }
+        }
+    </style>
 </head>
-<body style="background-color: white; font-family: sans-serif; text-align: center; padding: 40px 20px;">
-    <h2 style="font-size: 1.5rem; margin-bottom: 20px;">Looks like you forgot to type some of the URL.</h2>
-    <p style="font-size: 1.1rem; margin-bottom: 40px;">Try typing the WHOLE thing, or just click the link you wanted below.</p>
-    <div style="display: flex; flex-direction: column; gap: 20px; align-items: center;">
-        <a href="https://spamfan.github.io/optimizer" style="color: #003399; text-decoration: underline; font-size: 1.2rem;">spamfan.github.io/<b>optimizer</b></a>
-        <a href="https://spamfan.github.io/prints" style="color: #003399; text-decoration: underline; font-size: 1.2rem;">spamfan.github.io/<b>prints</b></a>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Welcome to spamfan.github.io,</h1>
+        <p>a free and unofficial resource for Walmart Wireless vendors.</p>
+    </header>
+
+    <div class="main-links">
+        <a href="https://spamfan.github.io/optimizer" class="btn">
+            <strong>Go to Optimizer,</strong> a tool for decluttering and enhancing daily inventory prints.
+        </a>
+
+        <a href="https://spamfan.github.io/prints" class="btn">
+            <strong>Go to Prints,</strong> for immediate access to commonly used documents, both official and non-official.
+        </a>
     </div>
+
+    <button class="toggle-trigger" id="toggle-btn" onclick="toggleUnstable()">Show pre-release repositories</button>
+
+    <div id="unstable-menu">
+        <p class="warning-text">⚠️ Unstable repositories shown below are for testing new features and may not work correctly!</p>
+        <div class="unstable-link-container">
+            <a href="https://spamfan.github.io/optimizerunstable" class="btn-small">optimizer unstable</a>
+            <a href="https://spamfan.github.io/printsunstable" class="btn-small">prints unstable</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleUnstable() {
+        const menu = document.getElementById('unstable-menu');
+        const btn = document.getElementById('toggle-btn');
+        
+        if (menu.style.display === 'block') {
+            menu.style.display = 'none';
+            btn.innerText = 'Show pre-release repositories';
+        } else {
+            menu.style.display = 'block';
+            btn.innerText = 'Hide pre-release repositories';
+        }
+    }
+</script>
+
 </body>
 </html>
