@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome | Spamfan.github.io</title>
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
     <style>
         :root {
             --main-black: #000000;
@@ -180,6 +186,13 @@
         <div class="unstable-link-container">
             <a href="#" onclick="showModal(event, 'https://spamfan.github.io/optimizerunstable', 'optimizer')" class="btn-small">optimizer unstable</a>
             <a href="#" onclick="showModal(event, 'https://spamfan.github.io/printsunstable', 'Prints')" class="btn-small">prints unstable</a>
+            <a href="#" onclick="showModal(event, 'https://spamfan.github.io/iris', 'Project Iris')" class="btn-small">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                project iris
+            </a>
         </div>
     </div>
 </div>
@@ -223,8 +236,17 @@
         targetUrl = url;
         
         // Update text based on which link was clicked
-        document.getElementById('modal-header-text').innerText = "This doesn't go to the regular " + appName + " app!";
-        document.getElementById('modal-url-text').innerText = url.replace('https://', '');
+        const urlText = url.replace('https://', '');
+        const header = document.getElementById('modal-header-text');
+        const bodyText = document.getElementById('modal-url-text');
+
+        if (appName === 'Project Iris') {
+            header.innerText = "This app is still in developmenf!";
+            bodyText.innerHTML = `<strong>${urlText}</strong> is a new project not yet ready for production. <br><br>`;
+        } else {
+            header.innerText = "This doesn't go to the regular " + appName + " app!";
+            bodyText.innerText = urlText + " is where new features are tested, it may not work correctly.";
+        }
         
         document.getElementById('modal-overlay').style.display = 'flex';
         document.getElementById('confirm-proceed').onclick = () => window.location.href = targetUrl;
