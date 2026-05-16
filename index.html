@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome | Spamfan.github.io</title>
-    <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -128,10 +127,17 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
 
+        .modal-header-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
         .modal-body {
             font-size: 0.95rem;
             margin-bottom: 24px;
             color: #333;
+            line-height: 1.4;
         }
 
         .modal-footer {
@@ -200,13 +206,15 @@
 <div id="modal-overlay" onclick="closeModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-body">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c62828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;">
-                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                <line x1="12" y1="9" x2="12" y2="13"></line>
-                <line x1="12" y1="17" x2="12.01" y2="17"></line>
-            </svg>
-            <strong><span id="modal-header-text"></span></strong><br><br>
-            <span id="modal-url-text"></span> is where new features are tested, it may not work correctly.
+            <div class="modal-header-container">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c62828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; flex-shrink: 0;">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                <strong><span id="modal-header-text"></span></strong>
+            </div>
+            <div id="modal-dynamic-text"></div>
         </div>
         <div class="modal-footer">
             <button class="modal-btn btn-cancel" onclick="closeModal()">Cancel</button>
@@ -235,17 +243,16 @@
         e.preventDefault();
         targetUrl = url;
         
-        // Update text based on which link was clicked
         const urlText = url.replace('https://', '');
         const header = document.getElementById('modal-header-text');
-        const bodyText = document.getElementById('modal-url-text');
+        const dynamicText = document.getElementById('modal-dynamic-text');
 
         if (appName === 'Project Iris') {
             header.innerText = "This app is still in development!";
-            bodyText.innerHTML = `<strong>${urlText}</strong> is a new project and is not yet ready for production. <br><br>`;
+            dynamicText.innerHTML = `<strong>${urlText}</strong> is a new project and is not yet ready for production.`;
         } else {
             header.innerText = "This doesn't go to the regular " + appName + " app!";
-            bodyText.innerText = urlText + " is where new features are tested, it may not work correctly.";
+            dynamicText.innerHTML = `<strong>${urlText}</strong> is where new features are tested, it may not work correctly.`;
         }
         
         document.getElementById('modal-overlay').style.display = 'flex';
