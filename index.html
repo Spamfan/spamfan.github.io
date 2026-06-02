@@ -14,7 +14,9 @@
             --main-black: #000000;
             --gray-text: #666666;
             --unstable-red: #c62828;
-            --walmart-blue: #0071ce; /* Standard Walmart Blue */
+            --walmart-blue: #0071ce;
+            --dev-purple: #311b92;
+            --submit-blue: #3b00ff;
         }
 
         body {
@@ -47,7 +49,6 @@
             margin-top: 0;
         }
 
-        /* Updated for Walmart Blue branding */
         .btn {
             display: block;
             width: 100%;
@@ -75,7 +76,11 @@
             text-align: left;
         }
 
-        #unstable-menu {
+        #dev-toggle-btn {
+            margin-top: 20px;
+        }
+
+        #unstable-menu, #dev-menu {
             display: none;
             margin-top: 20px;
             padding-left: 30px;
@@ -87,9 +92,8 @@
             margin-bottom: 15px;
         }
 
-        /* Updated to wrap to text length */
         .btn-small {
-            display: inline-block; /* Changed from block to wrap text */
+            display: inline-block;
             padding: 10px 16px;
             margin: 10px 0;
             font-size: 0.95rem;
@@ -98,7 +102,7 @@
             text-decoration: none;
             border-radius: 8px;
             text-align: left;
-            clear: both; /* Ensures they still stack vertically */
+            clear: both;
         }
 
         .unstable-link-container {
@@ -107,8 +111,27 @@
             align-items: flex-start;
         }
 
+        /* Dev Portal Links Styles */
+        .dev-row {
+            margin-bottom: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .dev-link {
+            display: inline-block;
+            background-color: var(--dev-purple);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
         /* Modal Styles */
-        #modal-overlay {
+        #modal-overlay, #dev-modal-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -157,14 +180,56 @@
         }
 
         .modal-btn:hover { opacity: 0.8; }
-
         .btn-cancel { background: #e0e0e0; color: #444; }
         .btn-proceed { background: var(--unstable-red); color: white; }
 
+        /* Dev Modal Specific Styles */
+        .dev-warning-title {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+        }
+
+        .dev-warning-indent {
+            margin-left: 20px;
+            font-size: 0.80rem;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .dev-form-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .dev-input {
+            flex-grow: 1;
+            background-color: #e0e0e0;
+            border: none;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 1rem;
+            outline: none;
+            min-width: 0;
+        }
+
+        .dev-btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .dev-btn-gray { background-color: #d4d4d4; color: #333; }
+        .dev-btn-blue { background-color: var(--submit-blue); color: white; }
+
         @media (min-width: 600px) {
-            body {
-                padding: 60px;
-            }
+            body { padding: 60px; }
         }
     </style>
 </head>
@@ -198,8 +263,29 @@
             <a href="#" onclick="showModal(event, 'https://spamfan.github.io/printsunstable', 'Prints')" class="btn-small">prints unstable</a>
         </div>
     </div>
+
+    <!-- Developer Portal Toggle & Menu -->
+    <button class="toggle-trigger" id="dev-toggle-btn" onclick="handleDevToggle()">Show developer file portal</button>
+
+    <div id="dev-menu">
+        <div class="dev-row">
+            <a href="https://github.com/spamfan/spamfan.github.io" class="dev-link">gh.c/sf/sf.gh.io</a>
+        </div>
+        <div class="dev-row">
+            <a href="https://github.com/spamfan/optimizer" class="dev-link">gh.c/sf/optimizer</a>
+            <a href="https://github.com/spamfan/optimizerunstable" class="dev-link">gh.c/sf/optimizerunstable</a>
+        </div>
+        <div class="dev-row">
+            <a href="https://github.com/spamfan/prints" class="dev-link">gh.c/sf/prints</a>
+            <a href="https://github.com/spamfan/printsunstable" class="dev-link">gh.c/sf/printsunstable</a>
+        </div>
+        <div class="dev-row">
+            <a href="https://github.com/spamfan/iris" class="dev-link">gh.c/sf/iris</a>
+        </div>
+    </div>
 </div>
 
+<!-- Unstable Modal -->
 <div id="modal-overlay" onclick="closeModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-body">
@@ -220,7 +306,36 @@
     </div>
 </div>
 
+<!-- Developer Portal Authentication Modal -->
+<div id="dev-modal-overlay" onclick="closeDevModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="modal-header-container" style="margin-bottom: 10px;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 12px; flex-shrink: 0;">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <h2 style="margin: 0; font-size: 1.4rem;">Restricted access</h2>
+        </div>
+        <div class="modal-body" style="margin-bottom: 15px;">
+            <div class="dev-warning-title">The developer portal requires admin privileges, please enter the developer passkey to enter.</div>
+            <div class="dev-warning-indent">Note: accessing developer tools without permission is a violation of Optimizer terms of service and could cause issues for affected tools. Developer tools may contain sensitive company information, meaning unauthorized access or sharing could also violate Walmart policies. Please only access the developer portal with prior permission and clearance from the developer.</div>
+        </div>
+        <form id="dev-auth-form" onsubmit="verifyDevPin(event)">
+            <div id="dev-error-msg" style="color: red; font-size: 0.85rem; margin-bottom: 4px; min-height: 18px; font-weight: 600;"></div>
+            <!-- Hidden username field to trigger standard password manager biometrics correctly -->
+            <input type="text" autocomplete="username" value="developer_portal" style="display:none;">
+            <div class="dev-form-row">
+                <input type="password" inputmode="numeric" pattern="[0-9]*" id="dev-pin-input" autocomplete="current-password" class="dev-input" required>
+                <button type="button" class="dev-btn dev-btn-gray" onclick="closeDevModal()">Go back</button>
+                <button type="submit" class="dev-btn dev-btn-blue" id="dev-submit-btn">SUBMIT</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
+    // Unstable Repos Logic
     let targetUrl = '';
 
     function toggleUnstable() {
@@ -260,8 +375,94 @@
         document.getElementById('modal-overlay').style.display = 'none';
     }
 
+    // Developer Portal Logic
+    let isDevAuthenticated = false;
+    let devFailedAttempts = 0;
+    let devLockTimer = null;
+
+    function handleDevToggle() {
+        const menu = document.getElementById('dev-menu');
+        const btn = document.getElementById('dev-toggle-btn');
+        
+        if (isDevAuthenticated) {
+            if (menu.style.display === 'block') {
+                menu.style.display = 'none';
+                btn.innerText = 'Show developer file portal';
+            } else {
+                menu.style.display = 'block';
+                btn.innerText = 'Hide developer file portal';
+            }
+        } else {
+            document.getElementById('dev-modal-overlay').style.display = 'flex';
+            document.getElementById('dev-pin-input').focus();
+        }
+    }
+
+    function closeDevModal() {
+        document.getElementById('dev-modal-overlay').style.display = 'none';
+        document.getElementById('dev-pin-input').value = '';
+        document.getElementById('dev-error-msg').innerText = '';
+    }
+
+    function verifyDevPin(e) {
+        e.preventDefault();
+        
+        const inputEl = document.getElementById('dev-pin-input');
+        const submitBtn = document.getElementById('dev-submit-btn');
+        const errorMsg = document.getElementById('dev-error-msg');
+        const pin = inputEl.value;
+        
+        // Obfuscate input by reversing and Base64 encoding
+        const reversedPin = pin.split('').reverse().join('');
+        const encodedPin = btoa(reversedPin);
+        
+        // Expected token for '19991020' (reversed: '02019991' -> Base64)
+        const expectedToken = 'MDIwMTk5OTE=';
+        
+        if (encodedPin === expectedToken) {
+            isDevAuthenticated = true;
+            devFailedAttempts = 0;
+            closeDevModal();
+            
+            // Show the dev menu
+            document.getElementById('dev-menu').style.display = 'block';
+            document.getElementById('dev-toggle-btn').innerText = 'Hide developer file portal';
+        } else {
+            devFailedAttempts++;
+            inputEl.value = '';
+            
+            if (devFailedAttempts >= 3) {
+                inputEl.disabled = true;
+                submitBtn.disabled = true;
+                let timeLeft = 3;
+                
+                errorMsg.innerText = `Incorrect PIN. Try again in ${timeLeft}s...`;
+                
+                devLockTimer = setInterval(() => {
+                    timeLeft--;
+                    if (timeLeft <= 0) {
+                        clearInterval(devLockTimer);
+                        inputEl.disabled = false;
+                        submitBtn.disabled = false;
+                        errorMsg.innerText = '';
+                        devFailedAttempts = 0;
+                        inputEl.focus();
+                    } else {
+                        errorMsg.innerText = `Incorrect PIN. Try again in ${timeLeft}s...`;
+                    }
+                }, 1000);
+            } else {
+                errorMsg.innerText = 'Incorrect PIN';
+            }
+        }
+    }
+
+    // Global Keydown for both modals
     window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeModal();
+        if (e.key === 'Escape') {
+            closeModal();
+            closeDevModal();
+        }
     });
 </script>
 
