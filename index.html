@@ -323,10 +323,10 @@
         </div>
         <form id="dev-auth-form" onsubmit="verifyDevPin(event)">
             <div id="dev-error-msg" style="color: red; font-size: 0.85rem; margin-bottom: 4px; min-height: 18px; font-weight: 600;"></div>
-            <!-- Hidden username field to trigger standard password manager biometrics correctly -->
-            <input type="text" autocomplete="username" value="developer_portal" style="display:none;">
+            <!-- Visually hidden username field to trigger standard password manager biometrics correctly -->
+            <input type="text" name="username" autocomplete="username" value="developer_portal" readonly tabindex="-1" style="position: absolute; opacity: 0; width: 1px; height: 1px; padding: 0; border: none; overflow: hidden;">
             <div class="dev-form-row">
-                <input type="password" inputmode="numeric" pattern="[0-9]*" id="dev-pin-input" autocomplete="current-password" class="dev-input" required>
+                <input type="password" name="password" inputmode="numeric" pattern="[0-9]*" id="dev-pin-input" autocomplete="current-password" class="dev-input" required>
                 <button type="button" class="dev-btn dev-btn-gray" onclick="closeDevModal()">Go back</button>
                 <button type="submit" class="dev-btn dev-btn-blue" id="dev-submit-btn">SUBMIT</button>
             </div>
