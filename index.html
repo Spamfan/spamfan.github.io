@@ -80,10 +80,18 @@
             margin-top: 20px;
         }
 
-        #unstable-menu, #dev-menu {
+        #unstable-menu {
             display: none;
             margin-top: 20px;
             padding-left: 30px;
+        }
+
+        #dev-menu {
+            display: none;
+            margin-top: 20px;
+            padding-left: 10px;
+            max-height: 350px;
+            overflow-y: auto;
         }
 
         .warning-text {
@@ -112,11 +120,14 @@
         }
 
         /* Dev Portal Links Styles */
-        .dev-row {
-            margin-bottom: 8px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
+        .dev-repo-group {
+            margin-bottom: 16px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+
+        .dev-repo-group:last-child {
+            border-bottom: none;
         }
 
         .dev-link {
@@ -127,6 +138,24 @@
             border-radius: 4px;
             text-decoration: none;
             font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .dev-repo-actions {
+            margin-top: 6px;
+            margin-left: 20px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .dev-action-btn {
+            display: inline-block;
+            background-color: #4527a0;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.75rem;
             font-weight: 600;
         }
 
@@ -197,11 +226,31 @@
             line-height: 1.4;
         }
 
+        .dev-checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            font-size: 0.85rem;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .dev-checkbox-row input[type="checkbox"] {
+            margin: 0;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .dev-checkbox-row label {
+            cursor: pointer;
+        }
+
         .dev-form-row {
             display: flex;
             gap: 10px;
             align-items: center;
-            margin-top: 5px;
         }
 
         .dev-input {
@@ -268,19 +317,52 @@
     <button class="toggle-trigger" id="dev-toggle-btn" onclick="handleDevToggle()">Show developer file portal</button>
 
     <div id="dev-menu">
-        <div class="dev-row">
+        <div class="dev-repo-group">
             <a href="https://github.com/spamfan/spamfan.github.io" class="dev-link">gh.c/sf/sf.gh.io</a>
+            <div class="dev-repo-actions">
+                <a href="https://github.com/spamfan/spamfan.github.io/upload/main" class="dev-action-btn">Upload</a>
+                <a href="https://github.com/spamfan/spamfan.github.io/raw/main/index.html" class="dev-action-btn">Download</a>
+            </div>
         </div>
-        <div class="dev-row">
+
+        <div class="dev-repo-group">
             <a href="https://github.com/spamfan/optimizer" class="dev-link">gh.c/sf/optimizer</a>
+            <div class="dev-repo-actions">
+                <a href="https://github.com/spamfan/optimizer/upload/main" class="dev-action-btn">Upload</a>
+                <a href="https://github.com/spamfan/optimizer/raw/main/index.html" class="dev-action-btn">Download</a>
+            </div>
+        </div>
+
+        <div class="dev-repo-group">
             <a href="https://github.com/spamfan/optimizerunstable" class="dev-link">gh.c/sf/optimizerunstable</a>
+            <div class="dev-repo-actions">
+                <a href="https://github.com/spamfan/optimizerunstable/upload/main" class="dev-action-btn">Upload</a>
+                <a href="https://github.com/spamfan/optimizerunstable/raw/main/index.html" class="dev-action-btn">Download</a>
+            </div>
         </div>
-        <div class="dev-row">
+
+        <div class="dev-repo-group">
             <a href="https://github.com/spamfan/prints" class="dev-link">gh.c/sf/prints</a>
-            <a href="https://github.com/spamfan/printsunstable" class="dev-link">gh.c/sf/printsunstable</a>
+            <div class="dev-repo-actions">
+                <a href="https://github.com/spamfan/prints/upload/main" class="dev-action-btn">Upload</a>
+                <a href="https://github.com/spamfan/prints/raw/main/index.html" class="dev-action-btn">Download</a>
+            </div>
         </div>
-        <div class="dev-row">
+
+        <div class="dev-repo-group">
+            <a href="https://github.com/spamfan/printsunstable" class="dev-link">gh.c/sf/printsunstable</a>
+            <div class="dev-repo-actions">
+                <a href="https://github.com/spamfan/printsunstable/upload/main" class="dev-action-btn">Upload</a>
+                <a href="https://github.com/spamfan/printsunstable/raw/main/index.html" class="dev-action-btn">Download</a>
+            </div>
+        </div>
+
+        <div class="dev-repo-group">
             <a href="https://github.com/spamfan/iris" class="dev-link">gh.c/sf/iris</a>
+            <div class="dev-repo-actions">
+                <a href="https://github.com/spamfan/iris/upload/main" class="dev-action-btn">Upload</a>
+                <a href="https://github.com/spamfan/iris/raw/main/index.html" class="dev-action-btn">Download</a>
+            </div>
         </div>
     </div>
 </div>
@@ -325,6 +407,12 @@
             <div id="dev-error-msg" style="color: red; font-size: 0.85rem; margin-bottom: 4px; min-height: 18px; font-weight: 600;"></div>
             <!-- Visually hidden username field to trigger standard password manager biometrics correctly -->
             <input type="text" name="username" autocomplete="username" value="developer_portal" readonly tabindex="-1" style="position: absolute; opacity: 0; width: 1px; height: 1px; padding: 0; border: none; overflow: hidden;">
+            
+            <div class="dev-checkbox-row">
+                <input type="checkbox" id="dev-autofill-checkbox">
+                <label id="dev-autofill-label" for="dev-autofill-checkbox">Auto-fill pin for next 7 days (admin only)</label>
+            </div>
+
             <div class="dev-form-row">
                 <input type="password" name="password" inputmode="numeric" pattern="[0-9]*" id="dev-pin-input" autocomplete="current-password" class="dev-input" required>
                 <button type="button" class="dev-btn dev-btn-gray" onclick="closeDevModal()">Go back</button>
@@ -376,6 +464,7 @@
     }
 
     // Developer Portal Logic
+    const DEV_STORAGE_KEY = 'sf_dev_pin_data';
     let isDevAuthenticated = false;
     let devFailedAttempts = 0;
     let devLockTimer = null;
@@ -393,8 +482,38 @@
                 btn.innerText = 'Hide developer file portal';
             }
         } else {
+            // Check storage for auto-fill
+            const storedData = localStorage.getItem(DEV_STORAGE_KEY);
+            const inputEl = document.getElementById('dev-pin-input');
+            const checkboxEl = document.getElementById('dev-autofill-checkbox');
+            const labelEl = document.getElementById('dev-autofill-label');
+            
+            if (storedData) {
+                try {
+                    const parsed = JSON.parse(storedData);
+                    if (Date.now() < parsed.expiry) {
+                        const daysRemaining = Math.ceil((parsed.expiry - Date.now()) / (1000 * 60 * 60 * 24));
+                        inputEl.value = parsed.pin;
+                        checkboxEl.checked = true;
+                        labelEl.innerText = `Auto-fill pin for next ${daysRemaining} days (admin only)`;
+                    } else {
+                        // Expired
+                        localStorage.removeItem(DEV_STORAGE_KEY);
+                        inputEl.value = '';
+                        checkboxEl.checked = false;
+                        labelEl.innerText = 'Auto-fill pin for next 7 days (admin only)';
+                    }
+                } catch (e) {
+                    localStorage.removeItem(DEV_STORAGE_KEY);
+                }
+            } else {
+                inputEl.value = '';
+                checkboxEl.checked = false;
+                labelEl.innerText = 'Auto-fill pin for next 7 days (admin only)';
+            }
+
             document.getElementById('dev-modal-overlay').style.display = 'flex';
-            document.getElementById('dev-pin-input').focus();
+            inputEl.focus();
         }
     }
 
@@ -422,6 +541,16 @@
         if (encodedPin === expectedToken) {
             isDevAuthenticated = true;
             devFailedAttempts = 0;
+
+            // Handle auto-fill save
+            const checkboxEl = document.getElementById('dev-autofill-checkbox');
+            if (checkboxEl.checked) {
+                const expiryTime = Date.now() + (7 * 24 * 60 * 60 * 1000);
+                localStorage.setItem(DEV_STORAGE_KEY, JSON.stringify({ pin: pin, expiry: expiryTime }));
+            } else {
+                localStorage.removeItem(DEV_STORAGE_KEY);
+            }
+
             closeDevModal();
             
             // Show the dev menu
