@@ -89,9 +89,11 @@
         #dev-menu {
             display: none;
             margin-top: 20px;
-            padding-left: 10px;
+            padding-left: 0px;
             max-height: 350px;
             overflow-y: auto;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
         }
 
         .warning-text {
@@ -119,15 +121,43 @@
             align-items: flex-start;
         }
 
-        /* Dev Portal Links Styles */
-        .dev-repo-group {
-            margin-bottom: 16px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 8px;
+        /* Accessibility: Focus for Power Users */
+        a:focus-visible, button:focus-visible, input:focus-visible {
+            outline: 3px solid var(--submit-blue);
+            outline-offset: 2px;
+            border-radius: 4px;
         }
 
-        .dev-repo-group:last-child {
+        /* Loading Overlay Styles */
+        #loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e0e0e0;
+            border-top: 4px solid var(--walmart-blue);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Dev Portal Links Styles */
+        .dev-repo-group {
+            margin-bottom: 0;
             border-bottom: none;
+            padding-bottom: 0;
         }
 
         .dev-link {
@@ -143,7 +173,7 @@
 
         .dev-repo-actions {
             margin-top: 6px;
-            margin-left: 20px;
+            margin-left: 10px;
             display: flex;
             gap: 8px;
         }
@@ -157,6 +187,34 @@
             text-decoration: none;
             font-size: 0.75rem;
             font-weight: 600;
+        }
+
+        .patcher-btn-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .patcher-btn {
+            background-color: var(--dev-purple);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            min-height: 64px;
+            box-sizing: border-box;
+            transition: all 0.2s;
+        }
+
+        .patcher-btn:hover, .patcher-btn:focus-visible {
+            opacity: 0.8;
         }
 
         /* Modal Styles */
@@ -284,6 +342,10 @@
 </head>
 <body>
 
+<div id="loading-overlay">
+    <div class="spinner"></div>
+</div>
+
 <div class="container">
     <header>
         <h1>Welcome to spamfan.github.io,</h1>
@@ -291,16 +353,16 @@
     </header>
 
     <div class="main-links">
-        <a href="https://spamfan.github.io/optimizer" class="btn">
+        <a href="https://spamfan.github.io/optimizer" class="btn" onclick="handleLoad(event, 'https://spamfan.github.io/optimizer')">
             <strong>Go to Optimizer,</strong> a tool for decluttering and enhancing daily inventory prints.
         </a>
 
-        <a href="https://spamfan.github.io/prints" class="btn">
+        <a href="https://spamfan.github.io/prints" class="btn" onclick="handleLoad(event, 'https://spamfan.github.io/prints')">
             <strong>Go to Prints,</strong> for immediate access to commonly used documents, both official and non-official.
         </a>
 
-        <a href="#" onclick="showModal(event, 'https://spamfan.github.io/iris', 'Project Iris')" class="btn">
-            <strong>Go to Scanner,</strong> a companion app for scanning inventory into Optimizer from ESP (a work in progress).
+        <a href="https://spamfan.github.io/iris" class="btn" onclick="handleLoad(event, 'https://spamfan.github.io/iris')">
+            <strong>Go to Scanner,</strong> a companion app for scanning inventory into Optimizer from ESP.
         </a>
     </div>
 
@@ -317,52 +379,62 @@
     <button class="toggle-trigger" id="dev-toggle-btn" onclick="handleDevToggle()">Show developer file portal</button>
 
     <div id="dev-menu">
+        <!-- Row 1 -->
         <div class="dev-repo-group">
-            <a href="https://github.com/spamfan/spamfan.github.io" class="dev-link">gh.c/sf/sf.gh.io</a>
+            <a href="https://github.com/spamfan/spamfan.github.io" class="dev-link" onclick="handleLoad(event, 'https://github.com/spamfan/spamfan.github.io')">gh.c/sf/sf.gh.io</a>
             <div class="dev-repo-actions">
-                <a href="https://github.com/spamfan/spamfan.github.io/upload/main" class="dev-action-btn">Upload</a>
-                <a href="https://github.com/spamfan/spamfan.github.io/raw/main/index.html" class="dev-action-btn">Download</a>
+                <a href="https://github.com/spamfan/spamfan.github.io/upload/main" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/spamfan.github.io/upload/main')">Upload</a>
+                <a href="https://github.com/spamfan/spamfan.github.io/raw/main/index.html" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/spamfan.github.io/raw/main/index.html')">Download</a>
+            </div>
+        </div>
+        <div class="patcher-btn-container">
+            <a href="https://spamfan.github.io/patcher" class="patcher-btn" onclick="handleLoad(event, 'https://spamfan.github.io/patcher')">
+                go to patcher
+            </a>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="dev-repo-group">
+            <a href="https://github.com/spamfan/optimizer" class="dev-link" onclick="handleLoad(event, 'https://github.com/spamfan/optimizer')">gh.c/sf/optimizer</a>
+            <div class="dev-repo-actions">
+                <a href="https://github.com/spamfan/optimizer/upload/main" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/optimizer/upload/main')">Upload</a>
+                <a href="https://github.com/spamfan/optimizer/raw/main/index.html" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/optimizer/raw/main/index.html')">Download</a>
+            </div>
+        </div>
+        <div class="dev-repo-group">
+            <a href="https://github.com/spamfan/optimizerunstable" class="dev-link" onclick="handleLoad(event, 'https://github.com/spamfan/optimizerunstable')">gh.c/sf/optimizerunstable</a>
+            <div class="dev-repo-actions">
+                <a href="https://github.com/spamfan/optimizerunstable/upload/main" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/optimizerunstable/upload/main')">Upload</a>
+                <a href="https://github.com/spamfan/optimizerunstable/raw/main/index.html" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/optimizerunstable/raw/main/index.html')">Download</a>
             </div>
         </div>
 
+        <!-- Row 3 -->
         <div class="dev-repo-group">
-            <a href="https://github.com/spamfan/optimizer" class="dev-link">gh.c/sf/optimizer</a>
+            <a href="https://github.com/spamfan/prints" class="dev-link" onclick="handleLoad(event, 'https://github.com/spamfan/prints')">gh.c/sf/prints</a>
             <div class="dev-repo-actions">
-                <a href="https://github.com/spamfan/optimizer/upload/main" class="dev-action-btn">Upload</a>
-                <a href="https://github.com/spamfan/optimizer/raw/main/index.html" class="dev-action-btn">Download</a>
+                <a href="https://github.com/spamfan/prints/upload/main" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/prints/upload/main')">Upload</a>
+                <a href="https://github.com/spamfan/prints/raw/main/index.html" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/prints/raw/main/index.html')">Download</a>
+            </div>
+        </div>
+        <div class="dev-repo-group">
+            <a href="https://github.com/spamfan/printsunstable" class="dev-link" onclick="handleLoad(event, 'https://github.com/spamfan/printsunstable')">gh.c/sf/printsunstable</a>
+            <div class="dev-repo-actions">
+                <a href="https://github.com/spamfan/printsunstable/upload/main" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/printsunstable/upload/main')">Upload</a>
+                <a href="https://github.com/spamfan/printsunstable/raw/main/index.html" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/printsunstable/raw/main/index.html')">Download</a>
             </div>
         </div>
 
+        <!-- Row 4 -->
         <div class="dev-repo-group">
-            <a href="https://github.com/spamfan/optimizerunstable" class="dev-link">gh.c/sf/optimizerunstable</a>
+            <a href="https://github.com/spamfan/iris" class="dev-link" onclick="handleLoad(event, 'https://github.com/spamfan/iris')">gh.c/sf/iris</a>
             <div class="dev-repo-actions">
-                <a href="https://github.com/spamfan/optimizerunstable/upload/main" class="dev-action-btn">Upload</a>
-                <a href="https://github.com/spamfan/optimizerunstable/raw/main/index.html" class="dev-action-btn">Download</a>
+                <a href="https://github.com/spamfan/iris/upload/main" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/iris/upload/main')">Upload</a>
+                <a href="https://github.com/spamfan/iris/raw/main/index.html" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/iris/raw/main/index.html')">Download</a>
             </div>
         </div>
-
         <div class="dev-repo-group">
-            <a href="https://github.com/spamfan/prints" class="dev-link">gh.c/sf/prints</a>
-            <div class="dev-repo-actions">
-                <a href="https://github.com/spamfan/prints/upload/main" class="dev-action-btn">Upload</a>
-                <a href="https://github.com/spamfan/prints/raw/main/index.html" class="dev-action-btn">Download</a>
-            </div>
-        </div>
-
-        <div class="dev-repo-group">
-            <a href="https://github.com/spamfan/printsunstable" class="dev-link">gh.c/sf/printsunstable</a>
-            <div class="dev-repo-actions">
-                <a href="https://github.com/spamfan/printsunstable/upload/main" class="dev-action-btn">Upload</a>
-                <a href="https://github.com/spamfan/printsunstable/raw/main/index.html" class="dev-action-btn">Download</a>
-            </div>
-        </div>
-
-        <div class="dev-repo-group">
-            <a href="https://github.com/spamfan/iris" class="dev-link">gh.c/sf/iris</a>
-            <div class="dev-repo-actions">
-                <a href="https://github.com/spamfan/iris/upload/main" class="dev-action-btn">Upload</a>
-                <a href="https://github.com/spamfan/iris/raw/main/index.html" class="dev-action-btn">Download</a>
-            </div>
+            <!-- Blank space to maintain grid alignment -->
         </div>
     </div>
 </div>
@@ -469,16 +541,26 @@
     let devFailedAttempts = 0;
     let devLockTimer = null;
 
+    function handleLoad(event, url) {
+        event.preventDefault();
+        document.getElementById('loading-overlay').style.display = 'flex';
+        requestAnimationFrame(() => {
+            setTimeout(() => {
+                window.location.href = url;
+            }, 0);
+        });
+    }
+
     function handleDevToggle() {
         const menu = document.getElementById('dev-menu');
         const btn = document.getElementById('dev-toggle-btn');
         
         if (isDevAuthenticated) {
-            if (menu.style.display === 'block') {
+            if (menu.style.display === 'grid') {
                 menu.style.display = 'none';
                 btn.innerText = 'Show developer file portal';
             } else {
-                menu.style.display = 'block';
+                menu.style.display = 'grid';
                 btn.innerText = 'Hide developer file portal';
             }
         } else {
@@ -556,7 +638,7 @@
             closeDevModal();
             
             // Show the dev menu
-            document.getElementById('dev-menu').style.display = 'block';
+            document.getElementById('dev-menu').style.display = 'grid';
             document.getElementById('dev-toggle-btn').innerText = 'Hide developer file portal';
         } else {
             devFailedAttempts++;
