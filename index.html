@@ -81,8 +81,7 @@
         }
 
         #unstable-menu {
-            display: none;
-            margin-top: 20px;
+            margin-top: 10px;
             padding-left: 30px;
         }
 
@@ -366,8 +365,6 @@
         </a>
     </div>
 
-    <button class="toggle-trigger" id="toggle-btn" onclick="toggleUnstable()">Show pre-release repositories</button>
-
     <div id="unstable-menu">
         <div class="unstable-link-container">
             <a href="#" onclick="showModal(event, 'https://spamfan.github.io/optimizerunstable', 'optimizer')" class="btn-small">optimizer unstable</a>
@@ -497,19 +494,6 @@
 <script>
     // Unstable Repos Logic
     let targetUrl = '';
-
-    function toggleUnstable() {
-        const menu = document.getElementById('unstable-menu');
-        const btn = document.getElementById('toggle-btn');
-        
-        if (menu.style.display === 'block') {
-            menu.style.display = 'none';
-            btn.innerText = 'Show pre-release repositories';
-        } else {
-            menu.style.display = 'block';
-            btn.innerText = 'Hide pre-release repositories';
-        }
-    }
 
     function showModal(e, url, appName) {
         e.preventDefault();
