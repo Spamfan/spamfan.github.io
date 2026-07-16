@@ -483,8 +483,12 @@
                 <a href="https://github.com/spamfan/iris/raw/main/index.html" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/iris/raw/main/index.html')">Download</a>
             </div>
         </div>
-        <div class="dev-repo-group">
-            <!-- Blank space to maintain grid alignment -->
+        <div class="dev-repo-group" style="border: 1px dashed #ccc; padding: 8px; border-radius: 6px; margin-top: 6px;">
+            <div style="font-size: 0.8rem; font-weight: 600; margin-bottom: 6px; color: var(--dev-purple);">Force Easter Egg (Local):</div>
+            <label style="display: flex; align-items: center; gap: 4px; font-size: 0.8rem; margin-bottom: 4px; cursor: pointer;"><input type="radio" name="egg_override" value="none" onchange="setEggOverride(this.value)" style="margin:0; cursor: pointer;"> Normal (RNG)</label>
+            <label style="display: flex; align-items: center; gap: 4px; font-size: 0.8rem; margin-bottom: 4px; cursor: pointer;"><input type="radio" name="egg_override" value="gold" onchange="setEggOverride(this.value)" style="margin:0; cursor: pointer;"> 🥇 Gold</label>
+            <label style="display: flex; align-items: center; gap: 4px; font-size: 0.8rem; margin-bottom: 4px; cursor: pointer;"><input type="radio" name="egg_override" value="diamond" onchange="setEggOverride(this.value)" style="margin:0; cursor: pointer;"> 💎 Diamond</label>
+            <label style="display: flex; align-items: center; gap: 4px; font-size: 0.8rem; cursor: pointer;"><input type="radio" name="egg_override" value="mythic" onchange="setEggOverride(this.value)" style="margin:0; cursor: pointer;"> 🔮 Mythic</label>
         </div>
     </div>
 </div>
@@ -606,6 +610,20 @@
         });
     }
 
+    function setEggOverride(value) {
+        if (value === 'none') {
+            localStorage.removeItem('sf_egg_override');
+        } else {
+            localStorage.setItem('sf_egg_override', value);
+        }
+    }
+
+    function syncEggRadios() {
+        const override = localStorage.getItem('sf_egg_override') || 'none';
+        const radio = document.querySelector(`input[name="egg_override"][value="${override}"]`);
+        if (radio) radio.checked = true;
+    }
+
     function handleDevToggle() {
         const menu = document.getElementById('dev-menu');
         const btn = document.getElementById('dev-toggle-btn');
@@ -617,6 +635,7 @@
             } else {
                 menu.style.display = 'grid';
                 btn.innerText = 'Hide developer file portal';
+                syncEggRadios();
             }
         } else {
             // Check storage for auto-fill
@@ -695,6 +714,7 @@
             // Show the dev menu
             document.getElementById('dev-menu').style.display = 'grid';
             document.getElementById('dev-toggle-btn').innerText = 'Hide developer file portal';
+            syncEggRadios();
         } else {
             devFailedAttempts++;
             inputEl.value = '';
@@ -727,7 +747,14 @@
 
     // Easter Egg Logic
     function initEasterEgg() {
-        const roll = Math.floor(Math.random() * 1000) + 1;
+        const override = localStorage.getItem('sf_egg_override');
+        let roll;
+        
+        if (override === 'gold') roll = 4;
+        else if (override === 'diamond') roll = 2;
+        else if (override === 'mythic') roll = 1;
+        else roll = Math.floor(Math.random() * 1000) + 1;
+
         let prize = null;
 
         if (roll === 1) {
