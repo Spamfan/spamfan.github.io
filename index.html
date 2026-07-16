@@ -334,6 +334,59 @@
         .dev-btn-gray { background-color: #d4d4d4; color: #333; }
         .dev-btn-blue { background-color: var(--submit-blue); color: white; }
 
+        /* Easter Egg Styles */
+        .egg-trigger {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            font-size: 1.2rem;
+            opacity: 0.5;
+            cursor: pointer;
+            z-index: 500;
+            transition: opacity 0.2s ease-in-out;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+        }
+        .egg-trigger:hover {
+            opacity: 1.0;
+        }
+        .egg-question-mark {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        .egg-img-container {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background-color: #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 15px;
+            position: relative;
+        }
+        .skeleton-pulse {
+            animation: skeletonPulse 1.5s infinite ease-in-out;
+        }
+        @keyframes skeletonPulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+        .egg-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            display: block;
+        }
+
         @media (min-width: 600px) {
             body { padding: 60px; }
         }
@@ -488,6 +541,24 @@
                 <button type="submit" class="dev-btn dev-btn-blue" id="dev-submit-btn">SUBMIT</button>
             </div>
         </form>
+    </div>
+</div>
+
+<!-- Easter Egg Modal -->
+<div id="egg-modal-overlay" onclick="closeEggModal()" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000;">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="modal-header-container">
+            <h2 id="egg-title" style="margin: 0; font-size: 1.4rem;"></h2>
+        </div>
+        <div class="modal-body">
+            <div id="egg-text" style="font-size: 1rem; color: #333; line-height: 1.4;"></div>
+            <div class="egg-img-container skeleton-pulse" id="egg-img-container">
+                <img id="egg-img" class="egg-img" src="" alt="Easter Egg">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn dev-btn-blue" onclick="closeEggModal()">Okay</button>
+        </div>
     </div>
 </div>
 
@@ -654,11 +725,76 @@
         }
     }
 
-    // Global Keydown for both modals
+    // Easter Egg Logic
+    function initEasterEgg() {
+        const roll = Math.floor(Math.random() * 1000) + 1;
+        let prize = null;
+
+        if (roll === 1) {
+            prize = {
+                title: "You've found the mythic Harry!!",
+                text: "This only has a 1/1,000 chance of happening, you're very lucky!! This doesn't do anything.",
+                img: "https://i.imgur.com/P5a1Z5K.png"
+            };
+        } else if (roll === 2 || roll === 3) {
+            prize = {
+                title: "You've found a diamond pair of cats!",
+                text: "Finding Harry and Rosie is such a treat! It only has a 1/500 chance of happening when you visit; it doesn't do anything.",
+                img: "https://i.imgur.com/kmBnjdN.png"
+            };
+        } else if (roll >= 4 && roll <= 13) {
+            prize = {
+                title: "You've found a golden Rosie!",
+                text: "This only has a 1/100 chance to happen each time you visit; it doesn't do anything.",
+                img: "https://i.imgur.com/E8CT90Z.png"
+            };
+        }
+
+        if (prize) {
+            const trigger = document.createElement('div');
+            trigger.className = 'egg-trigger';
+            trigger.innerHTML = '🐈<span class="egg-question-mark">?</span>';
+            trigger.onclick = () => openEggModal(prize);
+            document.body.appendChild(trigger);
+        }
+    }
+
+    function openEggModal(prize) {
+        const trigger = document.querySelector('.egg-trigger');
+        if (trigger) trigger.remove();
+
+        document.getElementById('egg-title').innerText = prize.title;
+        document.getElementById('egg-text').innerText = prize.text;
+        
+        const imgContainer = document.getElementById('egg-img-container');
+        const imgEl = document.getElementById('egg-img');
+        
+        imgContainer.classList.add('skeleton-pulse');
+        imgEl.style.opacity = '0';
+        
+        imgEl.onload = () => {
+            imgContainer.classList.remove('skeleton-pulse');
+            imgEl.style.opacity = '1';
+        };
+        imgEl.src = prize.img;
+
+        document.getElementById('egg-modal-overlay').style.display = 'flex';
+    }
+
+    function closeEggModal() {
+        document.getElementById('egg-modal-overlay').style.display = 'none';
+        document.getElementById('egg-img').src = '';
+    }
+
+    // Initialize Easter Egg on load
+    initEasterEgg();
+
+    // Global Keydown for all modals
     window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             closeModal();
             closeDevModal();
+            closeEggModal();
         }
     });
 
