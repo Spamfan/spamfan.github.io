@@ -340,7 +340,7 @@
             bottom: 15px;
             right: 15px;
             font-size: 1.2rem;
-            opacity: 0.5;
+            opacity: 1;
             cursor: pointer;
             z-index: 500;
             transition: opacity 0.2s ease-in-out;
@@ -350,9 +350,6 @@
             justify-content: center;
             width: 30px;
             height: 30px;
-        }
-        .egg-trigger:hover {
-            opacity: 1.0;
         }
         .egg-question-mark {
             position: absolute;
@@ -489,6 +486,15 @@
             <label style="display: flex; align-items: center; gap: 4px; font-size: 0.8rem; margin-bottom: 4px; cursor: pointer;"><input type="radio" name="egg_override" value="gold" onchange="setEggOverride(this.value)" style="margin:0; cursor: pointer;"> 🥇 Gold</label>
             <label style="display: flex; align-items: center; gap: 4px; font-size: 0.8rem; margin-bottom: 4px; cursor: pointer;"><input type="radio" name="egg_override" value="diamond" onchange="setEggOverride(this.value)" style="margin:0; cursor: pointer;"> 💎 Diamond</label>
             <label style="display: flex; align-items: center; gap: 4px; font-size: 0.8rem; cursor: pointer;"><input type="radio" name="egg_override" value="mythic" onchange="setEggOverride(this.value)" style="margin:0; cursor: pointer;"> 🔮 Mythic</label>
+        </div>
+
+        <!-- Row 5 -->
+        <div class="dev-repo-group">
+            <a href="https://github.com/spamfan/installmentmanager" class="dev-link" onclick="handleLoad(event, 'https://github.com/spamfan/installmentmanager')">gh.c/sf/im</a>
+            <div class="dev-repo-actions">
+                <a href="https://github.com/spamfan/installmentmanager/upload/main" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/installmentmanager/upload/main')">Upload</a>
+                <a href="https://github.com/spamfan/installmentmanager/raw/main/index.html" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/installmentmanager/raw/main/index.html')">Download</a>
+            </div>
         </div>
     </div>
 </div>
