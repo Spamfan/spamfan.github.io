@@ -427,6 +427,7 @@
         <div class="unstable-link-container">
             <a href="#" onclick="showModal(event, 'https://spamfan.github.io/optimizerunstable', 'optimizer')" class="btn-small">optimizer unstable</a>
             <a href="#" onclick="showModal(event, 'https://spamfan.github.io/printsunstable', 'Prints')" class="btn-small">prints unstable</a>
+            <a href="https://spamfan.github.io/workflowoptimizer" id="wfo-unstable-btn" class="btn-small" style="display: none;" onclick="handleLoad(event, 'https://spamfan.github.io/workflowoptimizer')">Workflow Optimizer</a>
         </div>
     </div>
 
@@ -502,6 +503,15 @@
             <div class="dev-repo-actions">
                 <a href="https://github.com/spamfan/installmentmanager/upload/main" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/installmentmanager/upload/main')">Upload</a>
                 <a href="https://github.com/spamfan/installmentmanager/raw/main/index.html" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/installmentmanager/raw/main/index.html')">Download</a>
+            </div>
+        </div>
+
+        <!-- Row 6 -->
+        <div class="dev-repo-group">
+            <a href="https://github.com/spamfan/workflowoptimizer" class="dev-link" onclick="handleLoad(event, 'https://github.com/spamfan/workflowoptimizer')">sf.gh.io/wfo</a>
+            <div class="dev-repo-actions">
+                <a href="https://github.com/spamfan/workflowoptimizer/upload/main" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/workflowoptimizer/upload/main')">Upload</a>
+                <a href="https://github.com/spamfan/workflowoptimizer/raw/main/index.html" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/workflowoptimizer/raw/main/index.html')">Download</a>
             </div>
         </div>
     </div>
@@ -624,6 +634,8 @@
         
         document.getElementById('modal-overlay').style.display = 'flex';
         document.getElementById('confirm-proceed').onclick = () => triggerLoadingSequence(targetUrl);
+        const cancelBtn = document.querySelector('#modal-overlay .btn-cancel');
+        if (cancelBtn) cancelBtn.focus();
     }
 
     function closeModal() {
@@ -658,13 +670,16 @@
     function handleDevToggle() {
         const menu = document.getElementById('dev-menu');
         const btn = document.getElementById('dev-toggle-btn');
+        const wfoBtn = document.getElementById('wfo-unstable-btn');
         
         if (isDevAuthenticated) {
             if (menu.style.display === 'grid') {
                 menu.style.display = 'none';
+                if (wfoBtn) wfoBtn.style.display = 'none';
                 btn.innerText = 'Show developer file portal';
             } else {
                 menu.style.display = 'grid';
+                if (wfoBtn) wfoBtn.style.display = 'inline-block';
                 btn.innerText = 'Hide developer file portal';
                 syncEggRadios();
             }
@@ -702,7 +717,12 @@
             }
 
             document.getElementById('dev-modal-overlay').style.display = 'flex';
-            if (shouldFocus) inputEl.focus();
+            if (shouldFocus) {
+                inputEl.focus();
+            } else {
+                const submitBtn = document.getElementById('dev-submit-btn');
+                if (submitBtn) submitBtn.focus();
+            }
         }
     }
 
@@ -744,6 +764,8 @@
             
             // Show the dev menu
             document.getElementById('dev-menu').style.display = 'grid';
+            const wfoBtn = document.getElementById('wfo-unstable-btn');
+            if (wfoBtn) wfoBtn.style.display = 'inline-block';
             document.getElementById('dev-toggle-btn').innerText = 'Hide developer file portal';
             syncEggRadios();
         } else {
@@ -811,8 +833,17 @@
         if (prize) {
             const trigger = document.createElement('div');
             trigger.className = 'egg-trigger';
+            trigger.setAttribute('tabindex', '0');
+            trigger.setAttribute('role', 'button');
+            trigger.setAttribute('aria-label', 'Secret Cat');
             trigger.innerHTML = '🐈<span class="egg-question-mark">?</span>';
             trigger.onclick = () => openEggModal(prize);
+            trigger.onkeydown = (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openEggModal(prize);
+                }
+            };
             document.body.appendChild(trigger);
         }
     }
@@ -837,6 +868,8 @@
         imgEl.src = prize.img;
 
         document.getElementById('egg-modal-overlay').style.display = 'flex';
+        const eggCloseBtn = document.querySelector('#egg-modal-overlay .modal-btn');
+        if (eggCloseBtn) eggCloseBtn.focus();
     }
 
     function closeEggModal() {
@@ -847,12 +880,18 @@
     // Initialize Easter Egg on load
     initEasterEgg();
 
-    // Global Keydown for all modals
+    // Global Keydown for all modals and Spacebar activation on link buttons
     window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             closeModal();
             closeDevModal();
             closeEggModal();
+        } else if (e.key === ' ' || e.key === 'Spacebar') {
+            const active = document.activeElement;
+            if (active && active.tagName === 'A' && (active.classList.contains('btn') || active.classList.contains('btn-small') || active.classList.contains('patcher-btn') || active.classList.contains('dev-link') || active.classList.contains('dev-action-btn'))) {
+                e.preventDefault();
+                active.click();
+            }
         }
     });
 
