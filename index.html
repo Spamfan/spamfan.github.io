@@ -17,6 +17,15 @@
             --walmart-blue: #0071ce;
             --dev-purple: #311b92;
             --submit-blue: #3b00ff;
+            --m3-surface: #f2f6fc;
+            --m3-border: #d3e3fd;
+            --m3-text-primary: #001d35;
+            --m3-text-secondary: #444746;
+            --m3-canary-bg: #fdf2f2;
+            --m3-canary-border: #f9d8d6;
+            --m3-canary-text: #b3261e;
+            --dev-unstable-bg: #b3261e;
+            --dev-unstable-action: #8c1d18;
         }
 
         body {
@@ -52,16 +61,26 @@
         .btn {
             display: block;
             width: 100%;
-            padding: 18px;
+            padding: 18px 20px;
             margin: 12px 0;
-            border: 2px solid var(--walmart-blue);
-            background: var(--walmart-blue);
-            color: white;
+            border: 1px solid var(--m3-border);
+            background: var(--m3-surface);
+            color: var(--m3-text-secondary);
             text-decoration: none;
-            border-radius: 10px;
+            border-radius: 20px;
             box-sizing: border-box;
             text-align: left;
             font-size: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .btn strong {
+            color: var(--m3-text-primary);
+        }
+
+        .btn:hover {
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
         }
 
         .toggle-trigger {
@@ -101,15 +120,22 @@
 
         .btn-small {
             display: inline-block;
-            padding: 10px 16px;
-            margin: 10px 0;
-            font-size: 0.95rem;
-            border: 2px solid var(--unstable-red);
-            color: var(--unstable-red);
+            padding: 8px 18px;
+            margin: 6px 0;
+            font-size: 0.88rem;
+            font-weight: 500;
+            border: 1px solid var(--m3-canary-border);
+            background: var(--m3-canary-bg);
+            color: var(--m3-canary-text);
             text-decoration: none;
-            border-radius: 8px;
+            border-radius: 9999px;
             text-align: left;
             clear: both;
+            transition: background 0.15s;
+        }
+
+        .btn-small:hover {
+            background: #fce8e6;
         }
 
         .unstable-link-container {
@@ -233,6 +259,19 @@
 
         .patcher-btn:hover, .patcher-btn:focus-visible {
             opacity: 0.8;
+        }
+
+        .patcher-btn-full {
+            grid-column: 1 / -1;
+            width: 100%;
+        }
+
+        .dev-link-unstable {
+            background-color: var(--dev-unstable-bg);
+        }
+
+        .dev-action-btn-unstable {
+            background-color: var(--dev-unstable-action);
         }
 
         /* Modal Styles */
@@ -449,7 +488,26 @@
     <button class="toggle-trigger" id="dev-toggle-btn" onclick="handleDevToggle()">Show developer file portal</button>
 
     <div id="dev-menu">
-        <!-- Row 1 -->
+        <!-- Admin Tools: Row 1 -->
+        <div class="patcher-btn-container">
+            <a href="https://spamfan.github.io/patcher" class="patcher-btn" onclick="handleLoad(event, 'https://spamfan.github.io/patcher')">
+                go to patcher
+            </a>
+        </div>
+        <div class="patcher-btn-container">
+            <a href="https://spamfan.github.io/installmentmanager" class="patcher-btn" onclick="handleLoad(event, 'https://spamfan.github.io/installmentmanager')">
+                go to installment manager
+            </a>
+        </div>
+
+        <!-- Admin Tools: Row 2 (Hero) -->
+        <div class="patcher-btn-container patcher-btn-full">
+            <a href="https://spamfan.github.io/navigator" class="patcher-btn" onclick="handleLoad(event, 'https://spamfan.github.io/navigator')">
+                go to navigator
+            </a>
+        </div>
+
+        <!-- Repo Grid Row 1: Spamfan Landing -->
         <div class="dev-repo-group">
             <a href="https://github.com/spamfan/spamfan.github.io" class="dev-link" onclick="handleLoad(event, 'https://github.com/spamfan/spamfan.github.io')">gh.c/sf/sf.gh.io</a>
             <div class="dev-repo-actions">
@@ -457,13 +515,9 @@
                 <a href="https://github.com/spamfan/spamfan.github.io/raw/main/index.html" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/spamfan.github.io/raw/main/index.html')">Download</a>
             </div>
         </div>
-        <div class="patcher-btn-container">
-            <a href="https://spamfan.github.io/patcher" class="patcher-btn" onclick="handleLoad(event, 'https://spamfan.github.io/patcher')">
-                go to patcher
-            </a>
-        </div>
+        <div></div>
 
-        <!-- Row 2 -->
+        <!-- Repo Grid Row 2: Optimizer & Optimizer Unstable -->
         <div class="dev-repo-group">
             <a href="https://github.com/spamfan/optimizer" class="dev-link" onclick="handleLoad(event, 'https://github.com/spamfan/optimizer')">gh.c/sf/optimizer</a>
             <div class="dev-repo-actions">
@@ -472,14 +526,24 @@
             </div>
         </div>
         <div class="dev-repo-group">
-            <a href="https://github.com/spamfan/optimizerunstable" class="dev-link" onclick="handleLoad(event, 'https://github.com/spamfan/optimizerunstable')">gh.c/sf/optimizerunstable</a>
+            <a href="https://github.com/spamfan/optimizerunstable" class="dev-link dev-link-unstable" onclick="handleLoad(event, 'https://github.com/spamfan/optimizerunstable')">gh.c/sf/optimizerunstable</a>
             <div class="dev-repo-actions">
-                <a href="https://github.com/spamfan/optimizerunstable/upload/main" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/optimizerunstable/upload/main')">Upload</a>
-                <a href="https://github.com/spamfan/optimizerunstable/raw/main/index.html" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/optimizerunstable/raw/main/index.html')">Download</a>
+                <a href="https://github.com/spamfan/optimizerunstable/upload/main" class="dev-action-btn dev-action-btn-unstable" onclick="handleLoad(event, 'https://github.com/spamfan/optimizerunstable/upload/main')">Upload</a>
+                <a href="https://github.com/spamfan/optimizerunstable/raw/main/index.html" class="dev-action-btn dev-action-btn-unstable" onclick="handleLoad(event, 'https://github.com/spamfan/optimizerunstable/raw/main/index.html')">Download</a>
             </div>
         </div>
 
-        <!-- Row 3 -->
+        <!-- Repo Grid Row 3: Installment Manager (Moved) -->
+        <div class="dev-repo-group">
+            <a href="https://github.com/spamfan/installmentmanager" class="dev-link" onclick="handleLoad(event, 'https://github.com/spamfan/installmentmanager')">sf.gh.io/im</a>
+            <div class="dev-repo-actions">
+                <a href="https://github.com/spamfan/installmentmanager/upload/main" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/installmentmanager/upload/main')">Upload</a>
+                <a href="https://github.com/spamfan/installmentmanager/raw/main/index.html" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/installmentmanager/raw/main/index.html')">Download</a>
+            </div>
+        </div>
+        <div></div>
+
+        <!-- Repo Grid Row 4: Prints & Prints Unstable -->
         <div class="dev-repo-group">
             <a href="https://github.com/spamfan/prints" class="dev-link" onclick="handleLoad(event, 'https://github.com/spamfan/prints')">gh.c/sf/prints</a>
             <div class="dev-repo-actions">
@@ -488,14 +552,14 @@
             </div>
         </div>
         <div class="dev-repo-group">
-            <a href="https://github.com/spamfan/printsunstable" class="dev-link" onclick="handleLoad(event, 'https://github.com/spamfan/printsunstable')">gh.c/sf/printsunstable</a>
+            <a href="https://github.com/spamfan/printsunstable" class="dev-link dev-link-unstable" onclick="handleLoad(event, 'https://github.com/spamfan/printsunstable')">gh.c/sf/printsunstable</a>
             <div class="dev-repo-actions">
-                <a href="https://github.com/spamfan/printsunstable/upload/main" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/printsunstable/upload/main')">Upload</a>
-                <a href="https://github.com/spamfan/printsunstable/raw/main/index.html" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/printsunstable/raw/main/index.html')">Download</a>
+                <a href="https://github.com/spamfan/printsunstable/upload/main" class="dev-action-btn dev-action-btn-unstable" onclick="handleLoad(event, 'https://github.com/spamfan/printsunstable/upload/main')">Upload</a>
+                <a href="https://github.com/spamfan/printsunstable/raw/main/index.html" class="dev-action-btn dev-action-btn-unstable" onclick="handleLoad(event, 'https://github.com/spamfan/printsunstable/raw/main/index.html')">Download</a>
             </div>
         </div>
 
-        <!-- Row 4 -->
+        <!-- Repo Grid Row 5: Iris -->
         <div class="dev-repo-group">
             <a href="https://github.com/spamfan/iris" class="dev-link" onclick="handleLoad(event, 'https://github.com/spamfan/iris')">gh.c/sf/iris</a>
             <div class="dev-repo-actions">
@@ -503,22 +567,9 @@
                 <a href="https://github.com/spamfan/iris/raw/main/index.html" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/iris/raw/main/index.html')">Download</a>
             </div>
         </div>
-        <div class="patcher-btn-container">
-            <a href="https://spamfan.github.io/navigator" class="patcher-btn" onclick="handleLoad(event, 'https://spamfan.github.io/navigator')">
-                go to navigator
-            </a>
-        </div>
+        <div></div>
 
-        <!-- Row 5 -->
-        <div class="dev-repo-group">
-            <a href="https://github.com/spamfan/installmentmanager" class="dev-link" onclick="handleLoad(event, 'https://github.com/spamfan/installmentmanager')">gh.c/sf/im</a>
-            <div class="dev-repo-actions">
-                <a href="https://github.com/spamfan/installmentmanager/upload/main" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/installmentmanager/upload/main')">Upload</a>
-                <a href="https://github.com/spamfan/installmentmanager/raw/main/index.html" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/installmentmanager/raw/main/index.html')">Download</a>
-            </div>
-        </div>
-
-        <!-- Row 6 -->
+        <!-- Repo Grid Row 6: Workflow Optimizer -->
         <div class="dev-repo-group">
             <a href="https://github.com/spamfan/workflowoptimizer" class="dev-link" onclick="handleLoad(event, 'https://github.com/spamfan/workflowoptimizer')">sf.gh.io/wfo</a>
             <div class="dev-repo-actions">
@@ -603,7 +654,7 @@
 </div>
 
 <script>
-    const APP_VERSION = 'v1.0.1';
+    const APP_VERSION = 'v1.0.2';
 
     // Unstable Repos Logic
     let targetUrl = '';
