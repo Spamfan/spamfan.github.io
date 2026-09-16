@@ -166,12 +166,23 @@
             padding-bottom: 0;
         }
 
+        .version-tag {
+            position: fixed;
+            top: 10px;
+            left: 14px;
+            font-size: 0.75rem;
+            color: #888;
+            font-weight: 500;
+            pointer-events: none;
+            z-index: 10;
+        }
+
         .dev-link {
             display: inline-block;
             background-color: var(--dev-purple);
             color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
+            padding: 4px 12px;
+            border-radius: 9999px;
             text-decoration: none;
             font-size: 0.85rem;
             font-weight: 600;
@@ -188,8 +199,8 @@
             display: inline-block;
             background-color: #4527a0;
             color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
+            padding: 4px 10px;
+            border-radius: 9999px;
             text-decoration: none;
             font-size: 0.75rem;
             font-weight: 600;
@@ -205,16 +216,17 @@
             background-color: var(--dev-purple);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 9999px;
             text-decoration: none;
             font-weight: bold;
-            font-size: 1.05rem;
+            font-size: 0.95rem;
             display: flex;
             align-items: center;
             justify-content: center;
             width: 100%;
             height: 100%;
-            min-height: 64px;
+            min-height: 48px;
+            padding: 10px 20px;
             box-sizing: border-box;
             transition: all 0.2s;
         }
@@ -398,6 +410,8 @@
 </head>
 <body>
 
+<div id="version-tag" class="version-tag"></div>
+
 <div id="loading-overlay">
     <div class="spinner"></div>
     <div id="loading-text"></div>
@@ -427,7 +441,7 @@
         <div class="unstable-link-container">
             <a href="#" onclick="showModal(event, 'https://spamfan.github.io/optimizerunstable', 'optimizer')" class="btn-small">optimizer unstable</a>
             <a href="#" onclick="showModal(event, 'https://spamfan.github.io/printsunstable', 'Prints')" class="btn-small">prints unstable</a>
-            <a href="https://spamfan.github.io/workflowoptimizer" id="wfo-unstable-btn" class="btn-small" style="display: none;" onclick="handleLoad(event, 'https://spamfan.github.io/workflowoptimizer')">Workflow Optimizer</a>
+            <a href="#" onclick="showModal(event, 'https://spamfan.github.io/workflowoptimizer', 'workflow optimizer (pre-dev)')" class="btn-small">workflow optimizer (pre-dev)</a>
         </div>
     </div>
 
@@ -489,12 +503,10 @@
                 <a href="https://github.com/spamfan/iris/raw/main/index.html" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/iris/raw/main/index.html')">Download</a>
             </div>
         </div>
-        <div class="dev-repo-group" style="border: 1px dashed #ccc; padding: 8px; border-radius: 6px; margin-top: 6px; grid-row: span 2;">
-            <div style="font-size: 0.8rem; font-weight: 600; margin-bottom: 6px; color: var(--dev-purple);">Force Easter Egg (Local):</div>
-            <label style="display: flex; align-items: center; gap: 4px; font-size: 0.8rem; margin-bottom: 4px; cursor: pointer;"><input type="radio" name="egg_override" value="none" onchange="setEggOverride(this.value)" style="margin:0; cursor: pointer;"> Normal (RNG)</label>
-            <label style="display: flex; align-items: center; gap: 4px; font-size: 0.8rem; margin-bottom: 4px; cursor: pointer;"><input type="radio" name="egg_override" value="gold" onchange="setEggOverride(this.value)" style="margin:0; cursor: pointer;"> 🥇 Gold</label>
-            <label style="display: flex; align-items: center; gap: 4px; font-size: 0.8rem; margin-bottom: 4px; cursor: pointer;"><input type="radio" name="egg_override" value="diamond" onchange="setEggOverride(this.value)" style="margin:0; cursor: pointer;"> 💎 Diamond</label>
-            <label style="display: flex; align-items: center; gap: 4px; font-size: 0.8rem; cursor: pointer;"><input type="radio" name="egg_override" value="mythic" onchange="setEggOverride(this.value)" style="margin:0; cursor: pointer;"> 🔮 Mythic</label>
+        <div class="patcher-btn-container">
+            <a href="https://spamfan.github.io/navigator" class="patcher-btn" onclick="handleLoad(event, 'https://spamfan.github.io/navigator')">
+                go to navigator
+            </a>
         </div>
 
         <!-- Row 5 -->
@@ -591,6 +603,8 @@
 </div>
 
 <script>
+    const APP_VERSION = 'v1.0.1';
+
     // Unstable Repos Logic
     let targetUrl = '';
     let loadTimer1, loadTimer2;
@@ -624,7 +638,10 @@
         const header = document.getElementById('modal-header-text');
         const dynamicText = document.getElementById('modal-dynamic-text');
 
-        if (appName === 'Project Iris') {
+        if (appName === 'workflow optimizer (pre-dev)') {
+            header.innerText = "This app is in early development!";
+            dynamicText.innerHTML = `<strong>${urlText}</strong> is currently in pre-development and is not ready for production use.`;
+        } else if (appName === 'Project Iris') {
             header.innerText = "This app is still in development!";
             dynamicText.innerHTML = `<strong>${urlText}</strong> is a new project and is not yet ready for production.`;
         } else {
@@ -653,35 +670,17 @@
         triggerLoadingSequence(url);
     }
 
-    function setEggOverride(value) {
-        if (value === 'none') {
-            localStorage.removeItem('sf_egg_override');
-        } else {
-            localStorage.setItem('sf_egg_override', value);
-        }
-    }
-
-    function syncEggRadios() {
-        const override = localStorage.getItem('sf_egg_override') || 'none';
-        const radio = document.querySelector(`input[name="egg_override"][value="${override}"]`);
-        if (radio) radio.checked = true;
-    }
-
     function handleDevToggle() {
         const menu = document.getElementById('dev-menu');
         const btn = document.getElementById('dev-toggle-btn');
-        const wfoBtn = document.getElementById('wfo-unstable-btn');
         
         if (isDevAuthenticated) {
             if (menu.style.display === 'grid') {
                 menu.style.display = 'none';
-                if (wfoBtn) wfoBtn.style.display = 'none';
                 btn.innerText = 'Show developer file portal';
             } else {
                 menu.style.display = 'grid';
-                if (wfoBtn) wfoBtn.style.display = 'inline-block';
                 btn.innerText = 'Hide developer file portal';
-                syncEggRadios();
             }
         } else {
             // Check storage for auto-fill
@@ -764,10 +763,7 @@
             
             // Show the dev menu
             document.getElementById('dev-menu').style.display = 'grid';
-            const wfoBtn = document.getElementById('wfo-unstable-btn');
-            if (wfoBtn) wfoBtn.style.display = 'inline-block';
             document.getElementById('dev-toggle-btn').innerText = 'Hide developer file portal';
-            syncEggRadios();
         } else {
             devFailedAttempts++;
             inputEl.value = '';
@@ -800,13 +796,8 @@
 
     // Easter Egg Logic
     function initEasterEgg() {
-        const override = localStorage.getItem('sf_egg_override');
-        let roll;
-        
-        if (override === 'gold') roll = 4;
-        else if (override === 'diamond') roll = 2;
-        else if (override === 'mythic') roll = 1;
-        else roll = Math.floor(Math.random() * 1000) + 1;
+        localStorage.removeItem('sf_egg_override');
+        const roll = Math.floor(Math.random() * 1000) + 1;
 
         let prize = null;
 
@@ -877,7 +868,8 @@
         document.getElementById('egg-img').src = '';
     }
 
-    // Initialize Easter Egg on load
+    // Initialize app metadata and Easter Egg on load
+    document.getElementById('version-tag').innerText = APP_VERSION;
     initEasterEgg();
 
     // Global Keydown for all modals and Spacebar activation on link buttons
