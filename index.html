@@ -1,953 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome | Spamfan.github.io</title>
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
-    <style>
-        :root {
-            --main-black: #000000;
-            --gray-text: #666666;
-            --unstable-red: #c62828;
-            --walmart-blue: #0071ce;
-            --dev-purple: #311b92;
-            --submit-blue: #3b00ff;
-            --m3-surface: #f2f6fc;
-            --m3-border: #d3e3fd;
-            --m3-text-primary: #001d35;
-            --m3-text-secondary: #444746;
-            --m3-canary-bg: #fdf2f2;
-            --m3-canary-border: #f9d8d6;
-            --m3-canary-text: #b3261e;
-            --dev-unstable-bg: #b3261e;
-            --dev-unstable-action: #8c1d18;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: white;
-            color: var(--main-black);
-            margin: 0;
-            display: flex;
-            justify-content: flex-start;
-            padding: 20px;
-            line-height: 1.3;
-        }
-
-        .container {
-            max-width: 500px; 
-            width: 100%;
-        }
-
-        header h1 {
-            font-size: 1.8rem;
-            font-weight: 800;
-            margin-bottom: 5px;
-            margin-top: 10px;
-        }
-
-        header p {
-            font-size: 1.1rem;
-            font-weight: 500;
-            margin-bottom: 30px;
-            margin-top: 0;
-        }
-
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 18px 20px;
-            margin: 12px 0;
-            border: 2px solid #005ea6;
-            background: var(--walmart-blue);
-            color: rgba(255, 255, 255, 0.92);
-            text-decoration: none;
-            border-radius: 20px;
-            box-sizing: border-box;
-            text-align: left;
-            font-size: 1rem;
-            box-shadow: 0 2px 6px rgba(0, 113, 206, 0.25);
-            transition: transform 0.15s, box-shadow 0.15s;
-        }
-
-        .btn strong {
-            color: #ffffff;
-        }
-
-        .btn:hover {
-            box-shadow: 0 4px 10px rgba(0, 113, 206, 0.35);
-        }
-
-        .toggle-trigger {
-            color: var(--gray-text);
-            background: none;
-            border: none;
-            font-size: 0.95rem;
-            cursor: pointer;
-            padding: 0;
-            margin-top: 40px;
-            display: block;
-            text-align: left;
-        }
-
-        #dev-toggle-btn {
-            margin-top: 20px;
-        }
-
-        #unstable-menu {
-            margin-top: 10px;
-            padding-left: 30px;
-        }
-
-        #dev-menu {
-            display: none;
-            margin-top: 20px;
-            padding-left: 0px;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .warning-text {
-            color: var(--gray-text);
-            font-size: 0.85rem;
-            margin-bottom: 15px;
-        }
-
-        .btn-small {
-            display: inline-block;
-            padding: 8px 18px;
-            margin: 6px 0;
-            font-size: 0.88rem;
-            font-weight: 500;
-            border: 1px solid var(--m3-canary-border);
-            background: var(--m3-canary-bg);
-            color: var(--m3-canary-text);
-            text-decoration: none;
-            border-radius: 9999px;
-            text-align: left;
-            clear: both;
-            transition: background 0.15s;
-        }
-
-        .btn-small:hover {
-            background: #fce8e6;
-        }
-
-        .unstable-link-container {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        /* Accessibility: Focus for Power Users */
-        a:focus-visible, button:focus-visible, input:focus-visible {
-            outline: 3px solid var(--submit-blue);
-            outline-offset: 2px;
-            border-radius: 4px;
-        }
-
-        /* Loading Overlay Styles */
-        #loading-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.7);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        #loading-text {
-            margin-top: 15px;
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--walmart-blue);
-            min-height: 1.3em;
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #e0e0e0;
-            border-top: 4px solid var(--walmart-blue);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Dev Portal Links Styles */
-        .dev-repo-group {
-            margin-bottom: 0;
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .version-tag {
-            position: fixed;
-            top: 10px;
-            left: 14px;
-            font-size: 0.75rem;
-            color: #888;
-            font-weight: 500;
-            pointer-events: none;
-            z-index: 10;
-        }
-
-        .dev-link {
-            display: inline-block;
-            background-color: var(--dev-purple);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 9999px;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .dev-repo-actions {
-            margin-top: 6px;
-            margin-left: 10px;
-            display: flex;
-            gap: 8px;
-        }
-
-        .dev-action-btn {
-            display: inline-block;
-            background-color: #4527a0;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 9999px;
-            text-decoration: none;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .patcher-btn-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .patcher-btn {
-            background-color: var(--dev-purple);
-            color: white;
-            border: none;
-            border-radius: 9999px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-            min-height: 48px;
-            padding: 10px 20px;
-            box-sizing: border-box;
-            transition: all 0.2s;
-        }
-
-        .patcher-btn:hover, .patcher-btn:focus-visible {
-            opacity: 0.8;
-        }
-
-        .patcher-btn-full {
-            grid-column: 1 / -1;
-            width: 100%;
-        }
-
-        .dev-link-unstable {
-            background-color: var(--dev-unstable-bg);
-        }
-
-        .dev-action-btn-unstable {
-            background-color: var(--dev-unstable-action);
-        }
-
-        /* Modal Styles */
-        #modal-overlay, #dev-modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 24px;
-            border-radius: 12px;
-            max-width: 400px;
-            width: 90%;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-
-        .modal-header-container {
-            display: flex;
-            align-items: center;
-            margin-bottom: 14px;
-        }
-
-        .modal-body {
-            font-size: 0.95rem;
-            margin-bottom: 24px;
-            color: #333;
-            line-height: 1.4;
-        }
-
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-        }
-
-        .modal-btn {
-            padding: 10px 20px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: opacity 0.2s;
-        }
-
-        .modal-btn:hover { opacity: 0.8; }
-        .btn-cancel { background: #e0e0e0; color: #444; }
-        .btn-proceed { background: var(--unstable-red); color: white; }
-
-        /* Dev Modal Specific Styles */
-        .dev-warning-title {
-            font-weight: 600;
-            font-size: 1.05rem;
-            margin-bottom: 10px;
-        }
-
-        .dev-warning-indent {
-            margin-left: 20px;
-            font-size: 0.80rem;
-            font-weight: 500;
-            line-height: 1.4;
-        }
-
-        .dev-checkbox-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-            font-size: 0.85rem;
-            color: #555;
-            font-weight: 500;
-        }
-
-        .dev-checkbox-row input[type="checkbox"] {
-            margin: 0;
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
-        }
-
-        .dev-checkbox-row label {
-            cursor: pointer;
-        }
-
-        .dev-form-row {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .dev-input {
-            flex-grow: 1;
-            background-color: #e0e0e0;
-            border: none;
-            border-radius: 6px;
-            padding: 10px;
-            font-size: 1rem;
-            outline: none;
-            min-width: 0;
-        }
-
-        .dev-btn {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
-        .dev-btn-gray { background-color: #d4d4d4; color: #333; }
-        .dev-btn-blue { background-color: var(--submit-blue); color: white; }
-
-        /* Easter Egg Styles */
-        .egg-trigger {
-            position: fixed;
-            bottom: 15px;
-            right: 15px;
-            font-size: 1.2rem;
-            opacity: 1;
-            cursor: pointer;
-            z-index: 500;
-            transition: opacity 0.2s ease-in-out;
-            user-select: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 30px;
-            height: 30px;
-        }
-        .egg-question-mark {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-        .egg-img-container {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            background-color: #e0e0e0;
-            border-radius: 8px;
-            overflow: hidden;
-            margin-top: 15px;
-            position: relative;
-        }
-        .skeleton-pulse {
-            animation: skeletonPulse 1.5s infinite ease-in-out;
-        }
-        @keyframes skeletonPulse {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
-        }
-        .egg-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-            display: block;
-        }
-
-        @media (min-width: 600px) {
-            body { padding: 60px; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workflow Optimizer</title>
+  <link rel="stylesheet" href="styles.css?v=0.0.4">
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
 <body>
 
-<div id="version-tag" class="version-tag"></div>
+  <!-- Top Bar Navigation -->
+  <div id="top-left-controls">
+    <button id="btn-back" class="pill-btn btn-back" style="display: none;">← BACK</button>
+    <button id="btn-logout" class="pill-btn btn-logout" style="display: none;">LOG OUT</button>
+    <div id="version-text" class="version-badge" title="Tap to inspect module versions">BLUE v0.0.3</div>
+  </div>
 
-<div id="loading-overlay">
-    <div class="spinner"></div>
-    <div id="loading-text"></div>
-</div>
+  <div id="top-right-hub">
+    <a href="https://spamfan.github.io" target="_self" class="pill-btn btn-hub">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
+      <span>spamfan.github.io</span>
+    </a>
+  </div>
 
-<div class="container">
-    <header>
-        <h1>Welcome to spamfan.github.io,</h1>
-        <p>a free and unofficial resource for Walmart Wireless vendors.</p>
-    </header>
+  <!-- GATEKEEPER / LOGIN VIEW -->
+  <div id="login-view">
+    <div class="login-card">
+      <h2 class="login-title">PROPRIETARY CONTENT</h2>
+      <p class="login-desc">
+        Unauthorized access and/or sharing is forbidden. By entering your store number and passcode, you agree to the terms of use shown below.
+      </p>
+      <input type="tel" id="store-input" class="login-input" placeholder="Store number" maxlength="6" autofocus>
+      <input type="tel" id="pin-input" class="login-input" placeholder="Store passcode" style="-webkit-text-security: disc;">
+      <div id="pin-error">Incorrect Store # or PIN</div>
+      <div class="btn-group">
+        <button id="btn-enter" class="pill-btn btn-primary">Enter</button>
+        <button id="btn-terms" class="pill-btn btn-secondary">Terms of Use</button>
+      </div>
+    </div>
+  </div>
 
-    <div class="main-links">
-        <a href="https://spamfan.github.io/optimizer" class="btn" onclick="handleLoad(event, 'https://spamfan.github.io/optimizer')">
-            <strong>Go to Optimizer,</strong> a tool for decluttering and enhancing daily inventory prints.
-        </a>
-
-        <a href="https://spamfan.github.io/prints" class="btn" onclick="handleLoad(event, 'https://spamfan.github.io/prints')">
-            <strong>Go to Prints,</strong> for immediate access to commonly used documents, both official and non-official.
-        </a>
-
-        <a href="https://spamfan.github.io/iris" class="btn" onclick="handleLoad(event, 'https://spamfan.github.io/iris')">
-            <strong>Go to Scanner,</strong> a companion app for scanning inventory into Optimizer from ESP.
-        </a>
+  <!-- DASHBOARD VIEW -->
+  <div id="dashboard-view" style="display: none;">
+    <div class="header-section">
+      <h1 class="main-title">workflow optimizer</h1>
+      <p class="main-subtitle">an unofficial resource for WSP employees</p>
     </div>
 
-    <div id="unstable-menu">
-        <div class="unstable-link-container">
-            <a href="#" onclick="showModal(event, 'https://spamfan.github.io/optimizerunstable', 'optimizer')" class="btn-small">optimizer unstable</a>
-            <a href="#" onclick="showModal(event, 'https://spamfan.github.io/printsunstable', 'Prints')" class="btn-small">prints unstable</a>
-            <a href="#" onclick="showModal(event, 'https://spamfan.github.io/workflowoptimizer', 'workflow optimizer (pre-dev)')" class="btn-small">workflow optimizer (pre-dev)</a>
+    <div class="dashboard-grid">
+      <!-- Card 1: Print inventory -->
+      <div class="dash-card">
+        <div class="card-header">
+          <h2 id="card-print-title" class="card-title">Print inventory</h2>
+          <div class="card-header-actions">
+            <span id="ping-status" class="ping-status"></span>
+            <button id="btn-refresh-ping" class="icon-btn" title="Refresh Ping">
+              <svg id="refresh-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+              </svg>
+            </button>
+          </div>
         </div>
+        <div class="card-body">
+          <div class="card-actions-row">
+            <button id="btn-upload-inv" class="pill-btn btn-action-upload">Upload inventory</button>
+            <button id="btn-print-inv" class="pill-btn btn-action-print">Print inventory</button>
+          </div>
+          <div class="ping-display-box">
+            <span class="ping-label">Live Ping Value:</span>
+            <span id="ping-value" class="ping-value">--</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Other -->
+      <div class="dash-card">
+        <div class="card-header">
+          <h2 class="card-title">Other</h2>
+        </div>
+        <div class="card-body">
+          <p class="placeholder-text">Future tools and document printing placeholder...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCANNER VIEW -->
+  <div id="scanner-view" style="display: none;">
+    <div id="scanner-instruction-banner" class="scanner-instruction-banner">
+      Place corners of the viewfinder just within the paper's borders.
+    </div>
+    <div id="scanner-card" class="scanner-card">
+      <div id="scanner-frame" class="scanner-frame">
+        <video id="scanner-video" playsinline></video>
+        <img id="scanner-preview-img" alt="Crop preview" style="display: none;">
+        <div class="reticle-corner tl"></div>
+        <div class="reticle-corner tr"></div>
+        <div class="reticle-corner bl"></div>
+        <div class="reticle-corner br"></div>
+      </div>
+    </div>
+    <div id="scanner-adjuster-bar" class="scanner-adjuster-bar" style="display: none;">
+      <button id="btn-adjust-zoom-out" class="icon-adjust-btn" title="Zoom Out">−</button>
+      <button id="btn-adjust-zoom-in" class="icon-adjust-btn" title="Zoom In">+</button>
+      <button id="btn-adjust-reset" class="pill-btn btn-secondary adjust-pill">Reset</button>
+      <button id="btn-adjust-cancel" class="pill-btn btn-logout adjust-pill">Live Camera</button>
+    </div>
+    <div class="scanner-controls-bar">
+      <div class="scanner-controls-spacer"></div>
+      <button id="btn-scanner-shutter" class="shutter-btn" title="Capture"></button>
+      <div class="scanner-controls-upload">
+        <label for="scanner-file-input" class="upload-icon-btn" title="Upload Photo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+        </label>
+        <input type="file" id="scanner-file-input" accept="image/*,.pdf,application/pdf" style="display: none;">
+      </div>
+    </div>
+  </div>
+
+  <!-- REVIEW VIEW -->
+  <div id="review-view" style="display: none;">
+    <div class="review-wrapper">
+      <div id="review-meta-card" class="review-meta-card">
+        <img id="review-meta-thumb" class="meta-thumb" alt="Sheet Thumbnail" title="Tap to inspect full scan">
+        <div class="meta-info">
+          <div class="meta-carrier-title" id="review-carrier-title">T-Mobile Inventory</div>
+          <div class="meta-details">
+            <span id="review-store-text">Store --</span> • <span id="review-timestamp-text">Just now</span>
+          </div>
+        </div>
+        <button id="btn-ocr-debug" class="pill-btn btn-diag" title="Inspect OCR Diagnostics">Diagnostics</button>
+      </div>
+
+      <div class="carrier-tabs-row">
+        <button class="carrier-tab active" data-carrier="tmo">T-Mobile</button>
+        <button class="carrier-tab" data-carrier="vzw">Verizon</button>
+        <button class="carrier-tab" data-carrier="att">AT&T</button>
+      </div>
+
+      <div id="review-loading-state" class="review-loading-state" style="display: none;">
+        <div class="spinner-bubble-sm"></div>
+        <span id="ocr-progress-text" class="review-progress-text">Analyzing sheet...</span>
+      </div>
+
+      <div id="staged-items-container" class="staged-items-container"></div>
+
+      <button id="btn-add-item" class="pill-btn btn-secondary add-row-btn">+ Add Device</button>
     </div>
 
-    <!-- Developer Portal Toggle & Menu -->
-    <button class="toggle-trigger" id="dev-toggle-btn" onclick="handleDevToggle()">Show developer file portal</button>
-
-    <div id="dev-menu">
-        <!-- Admin Tools: Row 1 -->
-        <div class="patcher-btn-container">
-            <a href="https://spamfan.github.io/patcher" class="patcher-btn" onclick="handleLoad(event, 'https://spamfan.github.io/patcher')">
-                go to patcher
-            </a>
-        </div>
-        <div class="patcher-btn-container">
-            <a href="https://spamfan.github.io/installmentmanager" class="patcher-btn" onclick="handleLoad(event, 'https://spamfan.github.io/installmentmanager')">
-                go to installment manager
-            </a>
-        </div>
-
-        <!-- Admin Tools: Row 2 (Hero) -->
-        <div class="patcher-btn-container patcher-btn-full">
-            <a href="https://spamfan.github.io/navigator" class="patcher-btn" onclick="handleLoad(event, 'https://spamfan.github.io/navigator')">
-                go to navigator
-            </a>
-        </div>
-
-        <!-- Repo Grid Row 1: Spamfan Landing -->
-        <div class="dev-repo-group">
-            <a href="https://github.com/spamfan/spamfan.github.io" class="dev-link" onclick="handleLoad(event, 'https://github.com/spamfan/spamfan.github.io')">gh.c/sf/sf.gh.io</a>
-            <div class="dev-repo-actions">
-                <a href="https://github.com/spamfan/spamfan.github.io/upload/main" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/spamfan.github.io/upload/main')">Upload</a>
-                <a href="https://github.com/spamfan/spamfan.github.io/raw/main/index.html" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/spamfan.github.io/raw/main/index.html')">Download</a>
-            </div>
-        </div>
-        <div></div>
-
-        <!-- Repo Grid Row 2: Optimizer & Optimizer Unstable -->
-        <div class="dev-repo-group">
-            <a href="https://github.com/spamfan/optimizer" class="dev-link" onclick="handleLoad(event, 'https://github.com/spamfan/optimizer')">gh.c/sf/optimizer</a>
-            <div class="dev-repo-actions">
-                <a href="https://github.com/spamfan/optimizer/upload/main" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/optimizer/upload/main')">Upload</a>
-                <a href="https://github.com/spamfan/optimizer/raw/main/index.html" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/optimizer/raw/main/index.html')">Download</a>
-            </div>
-        </div>
-        <div class="dev-repo-group">
-            <a href="https://github.com/spamfan/optimizerunstable" class="dev-link dev-link-unstable" onclick="handleLoad(event, 'https://github.com/spamfan/optimizerunstable')">gh.c/sf/optimizerunstable</a>
-            <div class="dev-repo-actions">
-                <a href="https://github.com/spamfan/optimizerunstable/upload/main" class="dev-action-btn dev-action-btn-unstable" onclick="handleLoad(event, 'https://github.com/spamfan/optimizerunstable/upload/main')">Upload</a>
-                <a href="https://github.com/spamfan/optimizerunstable/raw/main/index.html" class="dev-action-btn dev-action-btn-unstable" onclick="handleLoad(event, 'https://github.com/spamfan/optimizerunstable/raw/main/index.html')">Download</a>
-            </div>
-        </div>
-
-        <!-- Repo Grid Row 3: Installment Manager (Moved) -->
-        <div class="dev-repo-group">
-            <a href="https://github.com/spamfan/installmentmanager" class="dev-link" onclick="handleLoad(event, 'https://github.com/spamfan/installmentmanager')">sf.gh.io/im</a>
-            <div class="dev-repo-actions">
-                <a href="https://github.com/spamfan/installmentmanager/upload/main" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/installmentmanager/upload/main')">Upload</a>
-                <a href="https://github.com/spamfan/installmentmanager/raw/main/index.html" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/installmentmanager/raw/main/index.html')">Download</a>
-            </div>
-        </div>
-        <div></div>
-
-        <!-- Repo Grid Row 4: Prints & Prints Unstable -->
-        <div class="dev-repo-group">
-            <a href="https://github.com/spamfan/prints" class="dev-link" onclick="handleLoad(event, 'https://github.com/spamfan/prints')">gh.c/sf/prints</a>
-            <div class="dev-repo-actions">
-                <a href="https://github.com/spamfan/prints/upload/main" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/prints/upload/main')">Upload</a>
-                <a href="https://github.com/spamfan/prints/raw/main/index.html" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/prints/raw/main/index.html')">Download</a>
-            </div>
-        </div>
-        <div class="dev-repo-group">
-            <a href="https://github.com/spamfan/printsunstable" class="dev-link dev-link-unstable" onclick="handleLoad(event, 'https://github.com/spamfan/printsunstable')">gh.c/sf/printsunstable</a>
-            <div class="dev-repo-actions">
-                <a href="https://github.com/spamfan/printsunstable/upload/main" class="dev-action-btn dev-action-btn-unstable" onclick="handleLoad(event, 'https://github.com/spamfan/printsunstable/upload/main')">Upload</a>
-                <a href="https://github.com/spamfan/printsunstable/raw/main/index.html" class="dev-action-btn dev-action-btn-unstable" onclick="handleLoad(event, 'https://github.com/spamfan/printsunstable/raw/main/index.html')">Download</a>
-            </div>
-        </div>
-
-        <!-- Repo Grid Row 5: Iris -->
-        <div class="dev-repo-group">
-            <a href="https://github.com/spamfan/iris" class="dev-link" onclick="handleLoad(event, 'https://github.com/spamfan/iris')">gh.c/sf/iris</a>
-            <div class="dev-repo-actions">
-                <a href="https://github.com/spamfan/iris/upload/main" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/iris/upload/main')">Upload</a>
-                <a href="https://github.com/spamfan/iris/raw/main/index.html" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/iris/raw/main/index.html')">Download</a>
-            </div>
-        </div>
-        <div></div>
-
-        <!-- Repo Grid Row 6: Workflow Optimizer -->
-        <div class="dev-repo-group">
-            <a href="https://github.com/spamfan/workflowoptimizer" class="dev-link" onclick="handleLoad(event, 'https://github.com/spamfan/workflowoptimizer')">sf.gh.io/wfo</a>
-            <div class="dev-repo-actions">
-                <a href="https://github.com/spamfan/workflowoptimizer/upload/main" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/workflowoptimizer/upload/main')">Upload</a>
-                <a href="https://github.com/spamfan/workflowoptimizer/raw/main/index.html" class="dev-action-btn" onclick="handleLoad(event, 'https://github.com/spamfan/workflowoptimizer/raw/main/index.html')">Download</a>
-            </div>
-        </div>
+    <div class="floating-action-bar">
+      <button id="btn-scan-next" class="pill-btn btn-action-next">+ Scan Next Sheet</button>
+      <button id="btn-publish-all" class="pill-btn btn-primary btn-action-publish">Publish All</button>
     </div>
-</div>
+  </div>
 
-<!-- Unstable Modal -->
-<div id="modal-overlay" onclick="closeModal()">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <div class="modal-body">
-            <div class="modal-header-container">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c62828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; flex-shrink: 0;">
-                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                    <line x1="12" y1="9" x2="12" y2="13"></line>
-                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                </svg>
-                <strong><span id="modal-header-text"></span></strong>
-            </div>
-            <div id="modal-dynamic-text"></div>
-        </div>
-        <div class="modal-footer">
-            <button class="modal-btn btn-cancel" onclick="closeModal()">Cancel</button>
-            <button class="modal-btn btn-proceed" id="confirm-proceed">Proceed anyway</button>
-        </div>
+  <!-- LIGHTBOX MODAL -->
+  <div id="lightbox-modal" class="modal-overlay" style="display: none;">
+    <div class="lightbox-card">
+      <img id="lightbox-img" class="lightbox-img" alt="Full Sheet Capture">
+      <div class="modal-actions" style="margin-top: 10px;">
+        <button id="btn-lightbox-close" class="pill-btn btn-primary" style="width: auto;">Close</button>
+      </div>
     </div>
-</div>
+  </div>
 
-<!-- Developer Portal Authentication Modal -->
-<div id="dev-modal-overlay" onclick="closeDevModal()">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <div class="modal-header-container" style="margin-bottom: 10px;">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 12px; flex-shrink: 0;">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="12" y1="8" x2="12" y2="12"></line>
-                <line x1="12" y1="16" x2="12.01" y2="16"></line>
-            </svg>
-            <h2 style="margin: 0; font-size: 1.4rem;">Restricted access</h2>
-        </div>
-        <div class="modal-body" style="margin-bottom: 15px;">
-            <div class="dev-warning-title">The developer portal requires admin privileges, please enter the developer passkey to enter.</div>
-            <div class="dev-warning-indent">Note: accessing developer tools without permission is a violation of Optimizer terms of service and could cause issues for affected tools. Developer tools may contain sensitive company information, meaning unauthorized access or sharing could also violate Walmart policies. Please only access the developer portal with prior permission and clearance from the developer.</div>
-        </div>
-        <form id="dev-auth-form" onsubmit="verifyDevPin(event)">
-            <div id="dev-error-msg" style="color: red; font-size: 0.85rem; margin-bottom: 4px; min-height: 18px; font-weight: 600;"></div>
-            <!-- Visually hidden username field to trigger standard password manager biometrics correctly -->
-            <input type="text" name="username" autocomplete="username" value="developer_portal" readonly tabindex="-1" style="position: absolute; opacity: 0; width: 1px; height: 1px; padding: 0; border: none; overflow: hidden;">
-            
-            <div class="dev-checkbox-row">
-                <input type="checkbox" id="dev-autofill-checkbox">
-                <label id="dev-autofill-label" for="dev-autofill-checkbox">Auto-fill pin for next 7 days (admin only)</label>
-            </div>
-
-            <div class="dev-form-row">
-                <input type="password" name="password" inputmode="numeric" pattern="[0-9]*" id="dev-pin-input" autocomplete="current-password" class="dev-input" required>
-                <button type="button" class="dev-btn dev-btn-gray" onclick="closeDevModal()">Go back</button>
-                <button type="submit" class="dev-btn dev-btn-blue" id="dev-submit-btn">SUBMIT</button>
-            </div>
-        </form>
+  <!-- MODULE MANIFEST MODAL -->
+  <div id="manifest-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-card">
+      <div class="manifest-header">
+        <h3 class="manifest-title">Module Manifest</h3>
+        <span class="manifest-sub">Prototype Blue Diagnostics</span>
+      </div>
+      <table class="manifest-table">
+        <thead>
+          <tr>
+            <th>Module</th>
+            <th style="text-align: right;">Loaded Version</th>
+          </tr>
+        </thead>
+        <tbody id="manifest-list-body"></tbody>
+      </table>
+      <div class="modal-actions">
+        <button id="btn-manifest-close" class="pill-btn btn-primary" style="width: auto;">Done</button>
+      </div>
     </div>
-</div>
+  </div>
 
-<!-- Easter Egg Modal -->
-<div id="egg-modal-overlay" onclick="closeEggModal()" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000;">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <div class="modal-header-container">
-            <h2 id="egg-title" style="margin: 0; font-size: 1.4rem;"></h2>
-        </div>
-        <div class="modal-body">
-            <div id="egg-text" style="font-size: 1rem; color: #333; line-height: 1.4;"></div>
-            <div class="egg-img-container skeleton-pulse" id="egg-img-container">
-                <img id="egg-img" class="egg-img" src="" alt="Easter Egg">
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="modal-btn dev-btn-blue" onclick="closeEggModal()">Okay</button>
-        </div>
+  <!-- TERMS MODAL -->
+  <div id="terms-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-card">
+      <p>Terms of use haven't been made yet.</p>
+      <div class="modal-actions">
+        <button id="btn-terms-close" class="pill-btn btn-primary" style="width: auto;">Okay</button>
+      </div>
     </div>
-</div>
+  </div>
 
-<script>
-    const APP_VERSION = 'v1.0.3';
+  <!-- OCR DIAGNOSTICS MODAL -->
+  <div id="ocr-debug-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-card debug-card">
+      <div class="manifest-header">
+        <h3 class="manifest-title">OCR Telemetry & Diagnostics</h3>
+        <span id="ocr-debug-timestamp" class="manifest-sub">No scan telemetry recorded</span>
+      </div>
+      <div class="debug-summary-grid">
+        <div class="debug-metric">
+          <span class="debug-label">Carrier</span>
+          <span id="ocr-debug-carrier" class="debug-val">--</span>
+        </div>
+        <div class="debug-metric">
+          <span class="debug-label">Store #</span>
+          <span id="ocr-debug-store" class="debug-val">--</span>
+        </div>
+        <div class="debug-metric">
+          <span class="debug-label">Parsed Items</span>
+          <span id="ocr-debug-count" class="debug-val">0</span>
+        </div>
+      </div>
+      <h4 class="debug-section-title">Row Recognition Audit</h4>
+      <div id="ocr-debug-lines-list" class="debug-lines-list"></div>
+      <h4 class="debug-section-title">Raw Extracted OCR Text</h4>
+      <pre id="ocr-debug-raw-text" class="debug-raw-pre"></pre>
+      <div class="modal-actions">
+        <button id="btn-ocr-debug-close" class="pill-btn btn-primary" style="width: auto;">Done</button>
+      </div>
+    </div>
+  </div>
 
-    // Unstable Repos Logic
-    let targetUrl = '';
-    let loadTimer1, loadTimer2;
-
-    function triggerLoadingSequence(url) {
-        clearTimeout(loadTimer1);
-        clearTimeout(loadTimer2);
-        document.getElementById('loading-text').innerText = '';
-        document.getElementById('loading-overlay').style.display = 'flex';
-        
-        loadTimer1 = setTimeout(() => {
-            document.getElementById('loading-text').innerText = 'Loading...';
-        }, 1000);
-        
-        loadTimer2 = setTimeout(() => {
-            document.getElementById('loading-text').innerText = 'Almost there...';
-        }, 3000);
-
-        requestAnimationFrame(() => {
-            setTimeout(() => {
-                window.location.href = url;
-            }, 0);
-        });
-    }
-
-    function showModal(e, url, appName) {
-        e.preventDefault();
-        targetUrl = url;
-        
-        const urlText = url.replace('https://', '');
-        const header = document.getElementById('modal-header-text');
-        const dynamicText = document.getElementById('modal-dynamic-text');
-
-        if (appName === 'workflow optimizer (pre-dev)') {
-            header.innerText = "This app is in early development!";
-            dynamicText.innerHTML = `<strong>${urlText}</strong> is currently in pre-development and is not ready for production use.`;
-        } else if (appName === 'Project Iris') {
-            header.innerText = "This app is still in development!";
-            dynamicText.innerHTML = `<strong>${urlText}</strong> is a new project and is not yet ready for production.`;
-        } else {
-            header.innerText = "This doesn't go to the regular " + appName + " app!";
-            dynamicText.innerHTML = `<strong>${urlText}</strong> is where new features are tested, it may not work correctly.`;
-        }
-        
-        document.getElementById('modal-overlay').style.display = 'flex';
-        document.getElementById('confirm-proceed').onclick = () => triggerLoadingSequence(targetUrl);
-        const cancelBtn = document.querySelector('#modal-overlay .btn-cancel');
-        if (cancelBtn) cancelBtn.focus();
-    }
-
-    function closeModal() {
-        document.getElementById('modal-overlay').style.display = 'none';
-    }
-
-    // Developer Portal Logic
-    const DEV_STORAGE_KEY = 'sf_dev_pin_data';
-    let isDevAuthenticated = false;
-    let devFailedAttempts = 0;
-    let devLockTimer = null;
-
-    function handleLoad(event, url) {
-        event.preventDefault();
-        triggerLoadingSequence(url);
-    }
-
-    function handleDevToggle() {
-        const menu = document.getElementById('dev-menu');
-        const btn = document.getElementById('dev-toggle-btn');
-        
-        if (isDevAuthenticated) {
-            if (menu.style.display === 'grid') {
-                menu.style.display = 'none';
-                btn.innerText = 'Show developer file portal';
-            } else {
-                menu.style.display = 'grid';
-                btn.innerText = 'Hide developer file portal';
-            }
-        } else {
-            // Check storage for auto-fill
-            const storedData = localStorage.getItem(DEV_STORAGE_KEY);
-            const inputEl = document.getElementById('dev-pin-input');
-            const checkboxEl = document.getElementById('dev-autofill-checkbox');
-            const labelEl = document.getElementById('dev-autofill-label');
-            let shouldFocus = true;
-            
-            if (storedData) {
-                try {
-                    const parsed = JSON.parse(storedData);
-                    if (Date.now() < parsed.expiry) {
-                        const daysRemaining = Math.ceil((parsed.expiry - Date.now()) / (1000 * 60 * 60 * 24));
-                        inputEl.value = parsed.pin;
-                        checkboxEl.checked = true;
-                        labelEl.innerText = `Auto-fill pin for next ${daysRemaining} days (admin only)`;
-                        shouldFocus = false;
-                    } else {
-                        // Expired
-                        localStorage.removeItem(DEV_STORAGE_KEY);
-                        inputEl.value = '';
-                        checkboxEl.checked = false;
-                        labelEl.innerText = 'Auto-fill pin for next 7 days (admin only)';
-                    }
-                } catch (e) {
-                    localStorage.removeItem(DEV_STORAGE_KEY);
-                }
-            } else {
-                inputEl.value = '';
-                checkboxEl.checked = false;
-                labelEl.innerText = 'Auto-fill pin for next 7 days (admin only)';
-            }
-
-            document.getElementById('dev-modal-overlay').style.display = 'flex';
-            if (shouldFocus) {
-                inputEl.focus();
-            } else {
-                const submitBtn = document.getElementById('dev-submit-btn');
-                if (submitBtn) submitBtn.focus();
-            }
-        }
-    }
-
-    function closeDevModal() {
-        document.getElementById('dev-modal-overlay').style.display = 'none';
-        document.getElementById('dev-pin-input').value = '';
-        document.getElementById('dev-error-msg').innerText = '';
-    }
-
-    function verifyDevPin(e) {
-        e.preventDefault();
-        
-        const inputEl = document.getElementById('dev-pin-input');
-        const submitBtn = document.getElementById('dev-submit-btn');
-        const errorMsg = document.getElementById('dev-error-msg');
-        const pin = inputEl.value;
-        
-        // Obfuscate input by reversing and Base64 encoding
-        const reversedPin = pin.split('').reverse().join('');
-        const encodedPin = btoa(reversedPin);
-        
-        // Expected token for '19991020' (reversed: '02019991' -> Base64)
-        const expectedToken = 'MDIwMTk5OTE=';
-        
-        if (encodedPin === expectedToken) {
-            isDevAuthenticated = true;
-            devFailedAttempts = 0;
-
-            // Handle auto-fill save
-            const checkboxEl = document.getElementById('dev-autofill-checkbox');
-            if (checkboxEl.checked) {
-                const expiryTime = Date.now() + (7 * 24 * 60 * 60 * 1000);
-                localStorage.setItem(DEV_STORAGE_KEY, JSON.stringify({ pin: pin, expiry: expiryTime }));
-            } else {
-                localStorage.removeItem(DEV_STORAGE_KEY);
-            }
-
-            closeDevModal();
-            
-            // Show the dev menu
-            document.getElementById('dev-menu').style.display = 'grid';
-            document.getElementById('dev-toggle-btn').innerText = 'Hide developer file portal';
-        } else {
-            devFailedAttempts++;
-            inputEl.value = '';
-            
-            if (devFailedAttempts >= 3) {
-                inputEl.disabled = true;
-                submitBtn.disabled = true;
-                let timeLeft = 3;
-                
-                errorMsg.innerText = `Incorrect PIN. Try again in ${timeLeft}s...`;
-                
-                devLockTimer = setInterval(() => {
-                    timeLeft--;
-                    if (timeLeft <= 0) {
-                        clearInterval(devLockTimer);
-                        inputEl.disabled = false;
-                        submitBtn.disabled = false;
-                        errorMsg.innerText = '';
-                        devFailedAttempts = 0;
-                        inputEl.focus();
-                    } else {
-                        errorMsg.innerText = `Incorrect PIN. Try again in ${timeLeft}s...`;
-                    }
-                }, 1000);
-            } else {
-                errorMsg.innerText = 'Incorrect PIN';
-            }
-        }
-    }
-
-    // Easter Egg Logic
-    function initEasterEgg() {
-        localStorage.removeItem('sf_egg_override');
-        const roll = Math.floor(Math.random() * 1000) + 1;
-
-        let prize = null;
-
-        if (roll === 1) {
-            prize = {
-                title: "You've found the mythic Harry!!",
-                text: "This only has a 1/1,000 chance of happening, you're very lucky!! This doesn't do anything.",
-                img: "https://i.imgur.com/kmBnjdN.png"
-            };
-        } else if (roll === 2 || roll === 3) {
-            prize = {
-                title: "You've found a diamond pair of cats!",
-                text: "Finding Harry and Rosie is such a treat! It only has a 1/500 chance of happening when you visit; it doesn't do anything.",
-                img: "https://i.imgur.com/P5a1Z5K.png"
-            };
-        } else if (roll >= 4 && roll <= 13) {
-            prize = {
-                title: "You've found a golden Rosie!",
-                text: "This only has a 1/100 chance to happen each time you visit; it doesn't do anything.",
-                img: "https://i.imgur.com/E8CT90Z.png"
-            };
-        }
-
-        if (prize) {
-            const trigger = document.createElement('div');
-            trigger.className = 'egg-trigger';
-            trigger.setAttribute('tabindex', '0');
-            trigger.setAttribute('role', 'button');
-            trigger.setAttribute('aria-label', 'Secret Cat');
-            trigger.innerHTML = '🐈<span class="egg-question-mark">?</span>';
-            trigger.onclick = () => openEggModal(prize);
-            trigger.onkeydown = (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    openEggModal(prize);
-                }
-            };
-            document.body.appendChild(trigger);
-        }
-    }
-
-    function openEggModal(prize) {
-        const trigger = document.querySelector('.egg-trigger');
-        if (trigger) trigger.remove();
-
-        document.getElementById('egg-title').innerText = prize.title;
-        document.getElementById('egg-text').innerText = prize.text;
-        
-        const imgContainer = document.getElementById('egg-img-container');
-        const imgEl = document.getElementById('egg-img');
-        
-        imgContainer.classList.add('skeleton-pulse');
-        imgEl.style.opacity = '0';
-        
-        imgEl.onload = () => {
-            imgContainer.classList.remove('skeleton-pulse');
-            imgEl.style.opacity = '1';
-        };
-        imgEl.src = prize.img;
-
-        document.getElementById('egg-modal-overlay').style.display = 'flex';
-        const eggCloseBtn = document.querySelector('#egg-modal-overlay .modal-btn');
-        if (eggCloseBtn) eggCloseBtn.focus();
-    }
-
-    function closeEggModal() {
-        document.getElementById('egg-modal-overlay').style.display = 'none';
-        document.getElementById('egg-img').src = '';
-    }
-
-    // Initialize app metadata and Easter Egg on load
-    document.getElementById('version-tag').innerText = APP_VERSION;
-    initEasterEgg();
-
-    // Global Keydown for all modals and Spacebar activation on link buttons
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            closeModal();
-            closeDevModal();
-            closeEggModal();
-        } else if (e.key === ' ' || e.key === 'Spacebar') {
-            const active = document.activeElement;
-            if (active && active.tagName === 'A' && (active.classList.contains('btn') || active.classList.contains('btn-small') || active.classList.contains('patcher-btn') || active.classList.contains('dev-link') || active.classList.contains('dev-action-btn'))) {
-                e.preventDefault();
-                active.click();
-            }
-        }
-    });
-
-    // Clear loading overlay on Back/Forward cache restore
-    window.addEventListener('pageshow', (e) => {
-        if (e.persisted || document.getElementById('loading-overlay').style.display === 'flex') {
-            document.getElementById('loading-overlay').style.display = 'none';
-            document.getElementById('loading-text').innerText = '';
-            clearTimeout(loadTimer1);
-            clearTimeout(loadTimer2);
-        }
-    });
-</script>
-
+  <script type="module" src="js/app.js?v=0.0.6"></script>
 </body>
 </html>
